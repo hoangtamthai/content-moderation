@@ -1,0 +1,22 @@
+{
+  "name": "content-moderation",
+  "module": "content-moderation.ts",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "private": true,
+  "scripts": {
+    "server": "bun --hot src/server/index.ts",
+    "client": "bun src/client/index.ts",
+    "models:pull": "node-llama-cpp pull --dir ./models https://huggingface.co/Qwen/Qwen3-8B-GGUF:Q4_K_M",
+    "modesl:pull-bge": "node-llama-cpp pull --dir ./models https://huggingface.co/ggml-org/bge-small-en-v1.5-Q8_0-GGUF"
+  },
+  "type": "module",
+  "dependencies": {
+    "node-llama-cpp": "^3.18.1",
+    "zod": "^4.4.3"
+  }
+}

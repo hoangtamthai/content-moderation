@@ -3,7 +3,7 @@ import {
   type Moderation,
   type ModerationLabel,
 } from "../server/moderation/base";
-import type { StoredEmbedding } from "../server/moderation/embed";
+import { readQaParquet } from "./read_parquet";
 
 export interface ModerationEntry {
   text: string;
@@ -123,11 +123,18 @@ const spamEntries = spamLines
     return;
   })
   .filter((entry) => entry != undefined);
+
+const qaEntries = readQaParquet();
 const entries = [
   ...moderationEntries,
   ...sampleEntries,
   ...scamEntries,
   ...spamEntries,
+  ...qaEntries,
 ];
-const jsonl = entries.map((row) => JSON.stringify(row)).join("\n") + "\n";
+const jsonl =
+  entries
+    .filter((row) => row != undefined)
+    .map((row) => JSON.stringify(row))
+    .join("\n") + "\n";
 await Bun.write("dataset/clean/full_sample.jsonl", jsonl);

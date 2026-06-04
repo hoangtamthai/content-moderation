@@ -1,18 +1,27 @@
-export interface Moderation {
-  hate: boolean;
-  violence: boolean;
-  spam: boolean;
-  profanity: boolean;
+export interface Moderation extends ModerationLabel {
   message: string;
 }
-export const defaultModeration: Moderation = {
+
+export interface ModerationLabel {
+  hate: boolean;
+  scam: boolean;
+  sexual: boolean;
+  selfharm: boolean;
+  violence: boolean;
+}
+export const defaultLabel: ModerationLabel = {
   hate: false,
+  scam: false,
+  sexual: false,
+  selfharm: false,
   violence: false,
-  spam: false,
-  profanity: false,
+};
+
+export const defaultModeration: Moderation = {
+  ...defaultLabel,
   message: "",
 };
 
 export abstract class ModerationService {
-  abstract moderate(message: string): Moderation;
+  abstract moderate(message: string): Promise<Moderation>;
 }

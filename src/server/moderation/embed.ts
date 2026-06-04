@@ -1,87 +1,84 @@
-import { fileURLToPath } from "bun";
-import path from "path";
-import { getLlama, LlamaEmbedding } from "node-llama-cpp";
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+import { getLlama } from "node-llama-cpp";
 
-const bgeModelPath = path.join(
-  "models",
-  "hf_ggml-org_bge-small-en-v1.5-Q8_0.Q8_0.gguf",
-);
-const qwenModelPath = path.join("models", "hf_Qwen_Qwen3-8B.Q4_K_M.gguf");
+const nomicPath =
+  "/home/tam/projects/content-moderation/models/hf_nomic-ai_nomic-embed-text-v1.5.Q8_0.gguf";
+const embeddingsPath = "dataset/embeddings/embeddings-nomic.json";
+
 const llama = await getLlama();
-const model = await llama.loadModel({
-  modelPath: bgeModelPath,
-});
+const model = await llama.loadModel({ modelPath: nomicPath });
 const context = await model.createEmbeddingContext();
 
-async function embedDocuments(documents: readonly string[]) {
-  const embeddings = new Map<string, LlamaEmbedding>();
-
-  await Promise.all( documents.map(async (document) => {
-      const embedding = await context.getEmbeddingFor(document);
-      embeddings.set(document, embedding);
-
-      console.debug(
-        `${embeddings.size}/${documents.length} documents embedded`,
-      );
-    }),
-  );
-
-  return embeddings;
-}
-function findSimilarDocuments(
-  embedding: LlamaEmbedding,
-  documentEmbeddings: Map<string, LlamaEmbedding>,
-) {
-  const similarities = new Map<string, number>();
-  for (const [otherDocument, otherDocumentEmbedding] of documentEmbeddings)
-    similarities.set(
-      otherDocument,
-      embedding.calculateCosineSimilarity(otherDocumentEmbedding),
-    );
-
-  return Array.from(similarities.keys()).sort(
-    (a, b) => similarities.get(b)! - similarities.get(a)!,
-  );
+export interface StoredEmbedding {
+  prompt: string;
+  embedding: number[];
+  labels: ModerationLabel;
 }
 
-const documentEmbeddings = await embedDocuments([
-  "The sky is clear and blue today",
-  "I love eating pizza with extra cheese",
-  "Dogs love to play fetch with their owners",
-  "The capital of France is Paris",
-  "Drinking water is important for staying hydrated",
-  "Mount Everest is the tallest mountain in the world",
-  "A warm cup of tea is perfect for a cold winter day",
-  "Painting is a form of creative expression",
-  "Not all the things that shine are made of gold",
-  "Cleaning the house is a good way to keep it tidy",
-]);
-
-const query = "What is the tallest mountain on Earth?";
-const queryEmbedding = await context.getEmbeddingFor(query);
-
-const similarDocuments = findSimilarDocuments(
-  queryEmbedding,
-  documentEmbeddings,
+// Load cached embeddings
+const storedData: StoredEmbedding[] = await Bun.file(embeddingsPath).json();
+console.log(
+  `Loaded ${storedData.length} embeddings (dim: ${storedData[0]?.embedding.length})`,
 );
-const topSimilarDocument = similarDocuments[0];
 
-console.log("query:", query);
-console.log("Document:", topSimilarDocument);
+// Cosine similarity
+function cosineSimilarity(a: number[], b: number[]): number {
+  let dot = 0,
+    normA = 0,
+    normB = 0;
+  for (let i = 0; i < a.length; i++) {
+    const ai = a[i];
+    const bi = b[i];
+    if (ai && bi) {
+      dot += ai * bi;
+      normA += ai * bi;
+      normB += bi * bi;
+    }
+  }
+  return dot / (Math.sqrt(normA) * Math.sqrt(normB));
+}
 
-import { defaultModeration, ModerationService, type Moderation } from "./base";
+// Find similar documents
+function findSimilar(
+  queryEmbedding: number[],
+  topK: number = 5,
+): StoredEmbedding[] {
+  const similarities = storedData.map((entry, i) => ({
+    i,
+    sim: cosineSimilarity(queryEmbedding, entry.embedding),
+  }));
+  similarities.sort((a, b) => b.sim - a.sim);
+  const similars = similarities.slice(0, topK).map((s) => storedData[s.i]);
+  const filteredSimilars = similars.filter((s) => s !== undefined);
+  return filteredSimilars;
+}
+
+import {
+  defaultModeration,
+  ModerationService,
+  type Moderation,
+  type ModerationLabel,
+} from "./base";
 
 export class EmbedModeration extends ModerationService {
-  override moderate(message: string): Moderation {
-    const moderation = defaultModeration;
+  override async moderate(message: string): Promise<Moderation> {
+    const queryEmbedding = await context.getEmbeddingFor(message);
+    const queryVec = Array.from(queryEmbedding.vector);
+    const similarSamples = findSimilar(queryVec, 5);
+    const topMatch = similarSamples[0];
+
+    let moderation = { ...defaultModeration };
     moderation.message = message;
-    if (message.includes("hate")) {
-      moderation.hate = true;
+    if (!topMatch) {
+      return moderation;
     }
-    if (message.includes("violence")) {
-      moderation.violence = true;
-    }
+    moderation = { ...moderation, ...topMatch.labels };
+    // (moderation as any).similarSamples = similarSamples.map((s) => ({
+    //   prompt: s.prompt.substring(0, 100) + "...",
+    //   labels: s.labels,
+    // }));
+
     return moderation;
   }
 }
+
+export const embedModeration = new EmbedModeration();

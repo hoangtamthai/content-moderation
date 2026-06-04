@@ -1,22 +1,35 @@
 {
+  "version": "0.1.0",
   "name": "content-moderation",
   "module": "content-moderation.ts",
-  "devDependencies": {
-    "@types/bun": "latest"
-  },
   "peerDependencies": {
     "typescript": "^5"
   },
   "private": true,
   "scripts": {
     "server": "bun --hot src/server/index.ts",
-    "client": "bun src/client/index.ts",
     "models:pull": "node-llama-cpp pull --dir ./models https://huggingface.co/Qwen/Qwen3-8B-GGUF:Q4_K_M",
-    "modesl:pull-bge": "node-llama-cpp pull --dir ./models https://huggingface.co/ggml-org/bge-small-en-v1.5-Q8_0-GGUF"
+    "models:pull-bge": "node-llama-cpp pull --dir ./models https://huggingface.co/ggml-org/bge-small-en-v1.5-Q8_0-GGUF",
+    "models:pull-qwen-embed-4B": "node-llama-cpp pull --dir ./models https://huggingface.co/Qwen/Qwen3-Embedding-4B-GGUF",
+    "models:pull-qwen-0.6": "node-llama-cpp pull --dir ./models https://huggingface.co/Qwen/Qwen3-Embedding-0.6B-GGUF",
+    "models:pull-qwen-8b": "node-llama-cpp pull --dir ./models https://huggingface.co/Qwen/Qwen3-8B-GGUF",
+    "models:pull-qwen-4B": "node-llama-cpp pull --dir ./models https://huggingface.co/unsloth/Qwen3.5-4B-GGUF",
+    "models:pull-qwen-2B": "node-llama-cpp pull --dir ./models https://huggingface.co/unsloth/Qwen3.5-2B-GGUF",
+    "models:pull-qwen-1.5B": "node-llama-cpp pull --dir ./models https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+    "models:pull-qwen-0.5B": "node-llama-cpp pull --dir ./models https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF",
+    "models:pull-gemma-4-E2B": "node-llama-cpp pull --dir ./models https://huggingface.co/unsloth/gemma-4-E2B-it-GGUF",
+    "client:rule": "bun src/client/index.ts",
+    "client:": "bun src/client/index.ts",
+    "build:embeddings": "bun src/build-embeddings.ts",
+    "build:dataset": "bun src/dataset/preprocess.ts"
   },
   "type": "module",
   "dependencies": {
+    "hyparquet": "^1.26.0",
     "node-llama-cpp": "^3.18.1",
     "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
   }
 }

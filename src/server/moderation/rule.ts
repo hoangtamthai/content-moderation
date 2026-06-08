@@ -8,6 +8,7 @@ const hateWords = [
   "hating",
   "subhuman",
   "death to",
+  "go die",
 ];
 const violenceWords = [
   "kill",
@@ -39,6 +40,7 @@ const sexualWords = [
   "cock",
   "cocks",
   "cunt",
+  "dick",
 ];
 const scamWords = [
   "scam",
@@ -50,7 +52,19 @@ const scamWords = [
   "buy now",
   "click this link",
   "click here",
+  "call now",
+  "call here",
 ];
+const selfharmWords = [
+  "self destructive behaviour",
+  "kill myself",
+  "suicide",
+  "end my life",
+  "end my own life",
+  "end myself",
+  "hate myself",
+];
+
 const safePhrases = [
   "kill child process",
   "kill children process",
@@ -69,6 +83,7 @@ function normalize(text: string): string {
 
 class RuleModeration extends ModerationService {
   override moderate(message: string): Promise<Moderation> {
+    console.log(`Rule: ${message}`);
     const moderation = { ...defaultModeration, message };
     const normalizedMessage = normalize(message);
     hateWords.forEach((word) => {
@@ -91,6 +106,11 @@ class RuleModeration extends ModerationService {
         moderation.scam = true;
       }
     });
+    selfharmWords.forEach((word) => {
+      if (normalizedMessage.includes(word)) {
+        moderation.selfharm = true;
+      }
+    });
     safePhrases.forEach((phrase) => {
       if (normalizedMessage.includes(phrase)) {
         moderation.sexual = false;
@@ -104,7 +124,7 @@ class RuleModeration extends ModerationService {
         moderation.scam = true;
       }
     }
-    return new Promise(() => moderation);
+    return Promise.resolve(moderation);
   }
 }
 

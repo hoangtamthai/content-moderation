@@ -1,4 +1,5 @@
 import { mkdirSync } from "fs";
+import { defaultLabel } from "../server/moderation/base";
 
 const INPUT = "dataset/clean/full_sample.jsonl";
 const OUT = "dataset/clean";
@@ -79,13 +80,7 @@ if (needed > 0) {
   let poolIdx = 0;
   while (testLongLines.length < TARGET && poolIdx < concatPool.length) {
     const parts: string[] = [];
-    const labels = {
-      hate: false,
-      scam: false,
-      sexual: false,
-      selfharm: false,
-      violence: false,
-    };
+    const labels = defaultLabel; 
     let totalLen = 0;
 
     while (totalLen < CONCAT_TARGET_LENGTH && poolIdx < concatPool.length) {

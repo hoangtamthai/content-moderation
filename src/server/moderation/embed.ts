@@ -1,7 +1,6 @@
 import { getLlama } from "node-llama-cpp";
 
-const nomicPath =
-  "/home/tam/projects/content-moderation/models/hf_nomic-ai_nomic-embed-text-v1.5.Q8_0.gguf";
+const nomicPath = "models/hf_nomic-ai_nomic-embed-text-v1.5.Q8_0.gguf";
 const embeddingsPath = "dataset/embeddings/embeddings-nomic.json";
 
 const llama = await getLlama();
@@ -65,18 +64,12 @@ export class EmbedModeration extends ModerationService {
     const queryVec = Array.from(queryEmbedding.vector);
     const similarSamples = findSimilar(queryVec, 5);
     const topMatch = similarSamples[0];
-
     let moderation = { ...defaultModeration };
     moderation.message = message;
     if (!topMatch) {
       return moderation;
     }
     moderation = { ...moderation, ...topMatch.labels };
-    // (moderation as any).similarSamples = similarSamples.map((s) => ({
-    //   prompt: s.prompt.substring(0, 100) + "...",
-    //   labels: s.labels,
-    // }));
-
     return moderation;
   }
 }

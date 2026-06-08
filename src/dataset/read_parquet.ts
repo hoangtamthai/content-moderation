@@ -49,70 +49,89 @@ const testFile = await asyncBufferFromFile(
 const data = await parquetReadObjects({ file });
 const testData = await parquetReadObjects({ file: testFile });
 
-console.log("First 5 rows:");
 export function readQaParquet() {
-  console.log(`Total rows: ${data.length}\n`);
-  const trainModeration = parseData(data);
-  const testModeration = parseData(testData);
+  console.log(`Total rows: ${data.length + testData.length}\n`);
+  const trainModeration = parseData(data).filter((m) => m !== undefined);
+  console.log(`Train: ${trainModeration.length} / ${data.length}`);
+  const testModeration = parseData(testData).filter((m) => m !== undefined);
+  console.log(`Test: ${testModeration.length} / ${testData.length}`);
   return [...trainModeration, ...testModeration];
 }
 
 function parseData(data: Record<string, any>[]) {
   return data.map((entry, index) => {
-    console.log(`Processing ${index + 1}/${data.length}`);
+    // console.log(`Processing ${index + 1}/${data.length}`);
     const obj: QAModerationEntry = entry as QAModerationEntry;
     const message = obj.context.match(/Comment:\s*(.*)/)?.[1];
-    if (!message) return;
+    if (!message) {
+      // console.log("no message", obj);
+      return;
+    }
     const match = obj.answers.text.match(/^(\d+): (.*),/);
-    if (!match) return;
-    const [, labelNum, labelText] = match;
+    if (!match) {
+      // console.log("no match", obj);
+      return;
+    }
+    const [, , labelText] = match;
     const label = LabelText[labelText!];
-    if (!label) return;
-    defaultLabel.hate = label === "hate" || label === "harassment";
-    defaultLabel.selfharm = label === "self_harm";
-    defaultLabel.violence =
+    if (!label) {
+      // console.log("no label", labelText);
+      return;
+    }
+    if (message.includes("self destructive behaviour")) {
+    }
+    const newLabel = defaultLabel;
+    newLabel.hate = label === "hate" || label === "harassment";
+    newLabel.selfharm = label === "self_harm";
+    newLabel.violence =
       label === "violence" ||
       label === "threat" ||
       label === "illegal_weapons" ||
       label === "criminal_planning";
-    defaultLabel.sexual = label === "sexual" || label === "sexual_minor";
+    newLabel.sexual = label === "sexual" || label === "sexual_minor";
     const moderation: Moderation = {
       message,
-      ...defaultLabel,
+      ...newLabel,
     };
     return moderation;
   });
 }
-let a = 0;
-for (let i = 0; i < testData.length; i++) {
-  const entry = testData[i];
-  if (entry === undefined) {
-    console.log("undefined entry", entry);
-    continue;
-  }
-  const obj: QAModerationEntry = entry as QAModerationEntry;
-  const message = obj.context.match(/Comment:\s*(.*)/)?.[1];
-  // console.log("question:", obj.question);
-  // console.log("context", obj.context);
-  // console.log(message);
-  // console.log("answers", obj.answers.text);
-  const match = obj.answers.text.match(/^(\d+):([^,]+)/);
-  if (!match) {
-    console.log("no match", match);
-    continue;
-  }
-  const [, labelNum, labelText] = match;
-  // console.log(labelNum);
-  // console.log(labelText?.trim());
-  const label = LabelText[labelText?.trim()!];
-  if (!label) {
-    console.log("no label", labelText);
-    continue;
-  }
-  // console.log(label);
-  a++;
-  // console.log("---");
-}
-console.log(a, testData.length);
 
-// Show row count
+const parquetData = readQaParquet();
+Bun.write(
+  "dataset/original/qa_moderation/qa_parquet.jsonl",
+  parquetData.map((m) => JSON.stringify(m)).join("\n") + "\n",
+);
+
+// let a = 0;
+// for (let i = 0; i < testData.length; i++) {
+//   const entry = testData[i];
+//   if (entry === undefined) {
+//     console.log("undefined entry", entry);
+//     continue;
+//   }
+//   const obj: QAModerationEntry = entry as QAModerationEntry;
+//   const message = obj.context.match(/Comment:\s*(.*)/)?.[1];
+//   // console.log("question:", obj.question);
+//   // console.log("context", obj.context);
+//   // console.log(message);
+//   // console.log("answers", obj.answers.text);
+//   const match = obj.answers.text.match(/^(\d+):([^,]+)/);
+//   if (!match) {
+//     console.log("no match", match);
+//     continue;
+//   }
+//   const [, labelNum, labelText] = match;
+//   // console.log(labelNum);
+//   // console.log(labelText?.trim());
+//   const label = LabelText[labelText?.trim()!];
+//   if (!label) {
+//     console.log("no label", labelText);
+//     continue;
+//   }
+//   // console.log(label);
+//   a++;
+//   // console.log("---");
+// }
+
+// // Show row count

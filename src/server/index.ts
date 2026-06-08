@@ -45,9 +45,6 @@ Bun.serve({
       },
     },
   },
-  fetch(request) {
-    return new Response("Hello from Bun!");
-  },
 });
 
 console.log(`Moderation server started at 0.0.0.0:${ENV.PORT}`);

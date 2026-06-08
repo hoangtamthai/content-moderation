@@ -45,12 +45,37 @@ OUTPUT FORMAT (STRICT JSON ONLY):
   "resultCode": 1 (Clean), 0 (Violation),
   "violations": Array of matching CATEGORY strings (Possible violations CATEGORY: NONSENSICAL, JAILBREAK, SPAM, PROFANITY, SCAM, CRIMINALITY, HARASSMENT, HATE, SEXUAL, VIOLENCE, SELF_HARM, HARM, CHILD_SAFETY, BRAND_PROTECTION). Empty if clean.
   "explain": Explanation of why choose that VIOLATIONS. Empty if clean.
-}`;
+}
+
+EXAMPLE OUTPUT:
+{
+  "resultCode": 1,
+  "violations": ["SPAM"],
+  "explain": "The message contains link and contact."
+}
+`;
 
 const qwen2B = "models/hf_unsloth_Qwen3.5-2B.Q4_K_M.gguf";
+// best model
 const qwen1B = "models/hf_Qwen_Qwen2.5-1.5B-Instruct.Q4_K_M.gguf";
 const qwen05B = "models/hf_Qwen_Qwen2.5-0.5B-Instruct.Q4_K_M.gguf";
+const gemma3_1B = "models/hf_unsloth_gemma-3-1b-it.Q4_K_M.gguf";
+const gemma3Heretic1B =
+  "models/hf_Andycurrent_Gemma-3-1B-it-GLM-4.7-Flash-Heretic-Uncensored-Thinking_GGUF_Gemma-3-1B-it-GLM-4.gguf";
+const llama3_1B =
+  "models/hf_hugging-quants_Llama-3.2-1B-Instruct-Q4_K_M.Q4_K_M.gguf";
+const llamaGuard3_1B =
+  "models/hf_sheldonrobinson_Llama-Guard-3-1B-Q4_0.Q4_0.gguf";
+
+// thinking model
+const minicpm = "models/hf_openbmb_MiniCPM5-1B.Q4_K_M.gguf";
+
+// not compatible
 const gemma4E2B = "models/hf_unsloth_gemma-4-E2B-it.Q4_K_M.gguf";
+const next1B = "models/hf_mattritchey_next-1b-Q4_K_M.Q4_K_M.gguf";
+const hrm1B = "models/hf_sinimiini_HRM-Text-1B.BF16.gguf";
+
+const modelPath = qwen05B;
 
 class LlmModeration extends ModerationService {
   private llama: Llama | undefined;
@@ -62,14 +87,12 @@ class LlmModeration extends ModerationService {
   }
   async init() {
     this.llama = await getLlama();
-    this.model = await this.llama.loadModel({
-      modelPath: qwen1B,
-    });
+    this.model = await this.llama.loadModel({ modelPath });
     this.context = await this.model.createContext();
     this.session = new LlamaChatSession({
       contextSequence: this.context.getSequence(),
       systemPrompt: instruction,
-      forceAddSystemPrompt: true,
+      // forceAddSystemPrompt: true,
     });
   }
   override async moderate(message: string): Promise<Moderation> {
@@ -78,7 +101,7 @@ class LlmModeration extends ModerationService {
     moderation.message = message;
     if (!this.session) throw new Error("LLM Session not initialized");
     // const answer = await this.session.prompt(`${instruction}\n${message}`);
-    const answer = await this.session.prompt(`${message}`);
+    const answer = await this.session.prompt(`${instruction}\n${message}`);
     this.session.resetChatHistory();
     console.log("Answer:", answer);
     try {

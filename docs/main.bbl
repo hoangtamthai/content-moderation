@@ -1,0 +1,54 @@
+\begin{thebibliography}{1}
+
+\bibitem{text-moderation-01}
+Mike Afton.
+\newblock Text moderation 01.
+\newblock \url{https://huggingface.co/datasets/ifmain/text-moderation-01}, 2024.
+\newblock Accessed: 2026-05-05.
+
+\bibitem{cost-effective-moderation}
+Douglas Colquitt.
+\newblock Cost-effective ai content moderation.
+\newblock \url{https://douglascolquitt.com/content_moderation.html}, 2026.
+\newblock Accessed 2026-05-05.
+
+\bibitem{ldnoobw-list}
+LDNOOBW.
+\newblock List of dirty naughty obscene and otherwise bad words.
+\newblock \url{https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words}, 2020.
+\newblock Accessed: 2026-05-05.
+
+\bibitem{localmod}
+LocalMod.
+\newblock Self-hosted content moderation api that outperforms amazon comprehend.
+\newblock \url{https://github.com/KOKOSde/localmod}, 2026.
+\newblock Accessed: 2026-05-06.
+
+\bibitem{openai-moderation-api-evaluation}
+Todor Markov, Chong Zhang, Sandhini Agarwal, Tyna Eloundou, Teddy Lee, Steven Adler, Angela Jiang, and Lilian Weng.
+\newblock A holistic approach to undesired content detection in the real world.
+\newblock {\em CoRR}, abs/2208.03274, 2022.
+
+\bibitem{bun-runtime}
+Oven.
+\newblock Bun — incredibly fast javascript runtime.
+\newblock \url{https://bun.com}, 2026.
+\newblock Accessed: 2026-05-05.
+
+\bibitem{scam-data}
+Otabek Rizayev.
+\newblock Scam data.
+\newblock \url{https://huggingface.co/datasets/OtabekRizayev/scam-data}, 2024.
+\newblock Accessed: 2026-05-11.
+
+\bibitem{tam-github}
+Tam Thai.
+\newblock Content moderation.
+\newblock \url{https://github.com/hoangtamthai/content-moderation}, 2026.
+\newblock Accessed 2026-05-06.
+
+\bibitem{hate-speech}
+Cagri Toraman, Furkan \c{S}ahinu\c{c}, and Eyup~Halit Yilmaz.
+\newblock Large-scale hate speech detection with cross-domain transfer, June 2022.
+
+\end{thebibliography}

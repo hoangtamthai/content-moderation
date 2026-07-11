@@ -2,10 +2,16 @@ import type { Moderation } from "../server/moderation/base";
 import { ENV } from "../share/env";
 
 // bench.js
-const url = `http://${ENV.HOST}:${ENV.PORT}/moderation`;
-const ruleUrl = `${url}/rule`;
-const embedUrl = `${url}/embed`;
-const llmUrl = `${url}/llm`;
+const baseUrl = `http://${ENV.HOST}:${ENV.PORT}/moderation`;
+export const ruleUrl = `${baseUrl}/rule`;
+export const embedUrl = `${baseUrl}/embed`;
+export const llmUrl = `${baseUrl}/llm`;
+
+// export enum URL_PATH {
+//   rule = `http://${ENV.HOST}`,
+//   embed = embedUrl,
+//   llm = llmUrl,
+// }
 
 const messages = [
   "I don't want to be here",
@@ -18,9 +24,14 @@ const messages = [
   "That's a terrible idea",
   "I'm so scared",
 ];
+export enum DataSize {
+  short = "dataset/clean/test_short.jsonl",
+  medium = "dataset/clean/test_medium.jsonl",
+  long = "dataset/clean/test_long.jsonl",
+}
 
-async function loadData() {
-  const testData = Bun.file("dataset/clean/test_short.jsonl");
+export async function loadData(dataSize: DataSize) {
+  const testData = Bun.file(dataSize);
   const lines = (await testData.text()).split("\n").filter(Boolean);
   const data: Moderation[] = [];
   lines.forEach((line, i) => {
@@ -29,33 +40,42 @@ async function loadData() {
   return data;
 }
 
-let completed = 0;
-async function start() {
+export async function start(dataSize: DataSize, url: string) {
   // Load data to memory
-  const messages = await loadData();
+  const messages = await loadData(dataSize);
 
-  console.time("Benchmarking");
-  const total = messages.length;
-  // const total = 5000;
+  console.time(`Benchmarking ${url}`);
+  // const total = messages.length;
+  const total = ENV.TEST_SIZE;
+  console.time(`Send ${url}`);
   const responses = messages.map((message, i) => {
-    if (i >= total) return;
-    console.log(`Posting ${i + 1}/${total}`);
-    return postMessage(message.message, total);
+    if (i >= total) {
+      console.timeEnd(`Send ${url}`);
+      return;
+    }
+    // console.log(`Posting ${i + 1}/${total}`);
+    const start = performance.now();
+    const response = postMessage(url, message.message, i + 1, total);
   });
 }
 
-function postMessage(message: string, total: number): Promise<Moderation> {
-  return fetch(ruleUrl, {
+function postMessage(
+  url: string,
+  message: string,
+  current: number,
+  total: number,
+): Promise<Moderation> {
+  return fetch(url, {
     method: "POST",
     body: message,
   }).then(async (response) => {
-    completed++;
-    if (completed === total) {
-      console.timeEnd("Benchmarking");
+    current++;
+    if (current === total) {
+      console.timeEnd(`Benchmarking ${url}`);
       console.log("Done");
     }
     return response.json();
   });
 }
 
-start();
+// start(DataSize.short);

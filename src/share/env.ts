@@ -2,6 +2,7 @@ import { z } from "zod";
 const envSchema = z.object({
   PORT: z.coerce.number().default(16113),
   HOST: z.string().default("localhost"),
+  TEST_SIZE: z.coerce.number().default(50),
 });
 
 // Validate process.env

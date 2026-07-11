@@ -26,7 +26,10 @@
     "models:pull-ternary-bonsai": "node-llama-cpp pull --dir ./models https://huggingface.co/prism-ml/Ternary-Bonsai-1.7B-gguf",
     "models:pull-llama-3-1B": "node-llama-cpp pull --dir ./models https://huggingface.co/hugging-quants/Llama-3.2-1B-Instruct-Q4_K_M-GGUF",
     "models:pull-llamaguard-3-1B": "node-llama-cpp pull --dir ./models https://huggingface.co/sheldonrobinson/Llama-Guard-3-1B-Q4_0-GGUF",
-    "client:rule": "bun src/client/index.ts",
+    "client:short_rule": "bun src/client/index.ts",
+    "client:short": "bun src/client/short.ts",
+    "client:medium": "bun src/client/medium.ts",
+    "client:long": "bun src/client/long.ts",
     "client:": "bun src/client/index.ts",
     "build:embeddings": "bun src/build-embeddings.ts",
     "build:dataset": "bun src/dataset/preprocess.ts"

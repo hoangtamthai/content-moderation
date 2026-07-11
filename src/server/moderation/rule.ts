@@ -9,6 +9,17 @@ const hateWords = [
   "subhuman",
   "death to",
   "go die",
+  "deverse to die",
+  "retarded",
+  "stupid",
+  "idiot",
+  "retard",
+  "faggot",
+  "fag",
+  "gay",
+  "nigger",
+  "nigga",
+  "transphobe"
 ];
 const violenceWords = [
   "kill",
@@ -21,6 +32,14 @@ const violenceWords = [
   "murdering",
   "murderer",
   "murderers",
+  "kick",
+  "punch",
+  "cut",
+  "burn",
+  "stab",
+  "shoot",
+  "bomb",
+  "assassinate",
 ];
 const sexualWords = [
   "sex",
@@ -36,6 +55,7 @@ const sexualWords = [
   "fuck",
   "fucked",
   "pussy",
+  "bitch",
   "pussies",
   "cock",
   "cocks",

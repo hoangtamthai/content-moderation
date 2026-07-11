@@ -46,13 +46,6 @@ OUTPUT FORMAT (STRICT JSON ONLY):
   "violations": Array of matching CATEGORY strings (Possible violations CATEGORY: NONSENSICAL, JAILBREAK, SPAM, PROFANITY, SCAM, CRIMINALITY, HARASSMENT, HATE, SEXUAL, VIOLENCE, SELF_HARM, HARM, CHILD_SAFETY, BRAND_PROTECTION). Empty if clean.
   "explain": Explanation of why choose that VIOLATIONS. Empty if clean.
 }
-
-EXAMPLE OUTPUT:
-{
-  "resultCode": 1,
-  "violations": ["SPAM"],
-  "explain": "The message contains link and contact."
-}
 `;
 
 const qwen2B = "models/hf_unsloth_Qwen3.5-2B.Q4_K_M.gguf";
@@ -75,7 +68,7 @@ const gemma4E2B = "models/hf_unsloth_gemma-4-E2B-it.Q4_K_M.gguf";
 const next1B = "models/hf_mattritchey_next-1b-Q4_K_M.Q4_K_M.gguf";
 const hrm1B = "models/hf_sinimiini_HRM-Text-1B.BF16.gguf";
 
-const modelPath = qwen05B;
+const modelPath = qwen1B;
 
 class LlmModeration extends ModerationService {
   private llama: Llama | undefined;
@@ -100,9 +93,21 @@ class LlmModeration extends ModerationService {
     const moderation = { ...defaultModeration };
     moderation.message = message;
     if (!this.session) throw new Error("LLM Session not initialized");
+    if (!this.context) throw new Error("LLM Context not initialized");
+    // const context = await (
+    //   await (await getLlama()).loadModel({ modelPath })
+    // ).createContext();
+    // this.model = await this.llama.loadModel({ modelPath })
+    // this.context = await this.model.createContext();
+    // this.session = new LlamaChatSession({
+    //   contextSequence: context.getSequence(),
+    //   systemPrompt: instruction,
+    // });
     // const answer = await this.session.prompt(`${instruction}\n${message}`);
     const answer = await this.session.prompt(`${instruction}\n${message}`);
+    // this.session.();
     this.session.resetChatHistory();
+    // console.log("Session", this.session.getChatHistory());
     console.log("Answer:", answer);
     try {
       const lines = answer.trim().split("\n");

@@ -29,7 +29,7 @@ function cosineSimilarity(a: number[], b: number[]): number {
     const bi = b[i];
     if (ai && bi) {
       dot += ai * bi;
-      normA += ai * bi;
+      normA += ai * ai;
       normB += bi * bi;
     }
   }

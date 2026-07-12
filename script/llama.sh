@@ -1,0 +1,1 @@
+llama serve --port 8888 -m "./models/hf_Qwen_Qwen2.5-1.5B-Instruct.Q4_K_M.gguf"

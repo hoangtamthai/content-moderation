@@ -3,6 +3,10 @@ const envSchema = z.object({
   PORT: z.coerce.number().default(16113),
   HOST: z.string().default("localhost"),
   TEST_SIZE: z.coerce.number().default(50),
+  LAMBDA_RULE: z.coerce.number().default(100),
+  LAMBDA_EMBED: z.coerce.number().default(4),
+  LAMBDA_LLM: z.coerce.number().default(1),
+  WARMUP: z.coerce.number().default(10),
 });
 
 // Validate process.env

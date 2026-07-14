@@ -8,7 +8,7 @@ import {
 import { defaultModeration, ModerationService, type Moderation } from "./base";
 
 // source: https://moder8.net/prompt
-const instruction = `Role: Content Moderation Classifier
+export const instruction = `Role: Content Moderation Classifier
 Primary Goal: Analyze User-Generated Content (UGC) for semantic intent and policy violations. Output JSON ONLY.
 
 Core Logic Rules:
@@ -42,7 +42,6 @@ Constraints:
 
 OUTPUT FORMAT (STRICT JSON ONLY):
 {
-  "resultCode": 1 (Clean), 0 (Violation),
   "violations": Array of matching CATEGORY strings (Possible violations CATEGORY: NONSENSICAL, JAILBREAK, SPAM, PROFANITY, SCAM, CRIMINALITY, HARASSMENT, HATE, SEXUAL, VIOLENCE, SELF_HARM, HARM, CHILD_SAFETY, BRAND_PROTECTION). Empty if clean.
   "explain": Explanation of why choose that VIOLATIONS. Empty if clean.
 }
@@ -89,7 +88,7 @@ class LlmModeration extends ModerationService {
     });
   }
   override async moderate(message: string): Promise<Moderation> {
-    console.log("LLM Moderation:", message);
+    // console.log("LLM Moderation:", message);
     const moderation = { ...defaultModeration };
     moderation.message = message;
     if (!this.session) throw new Error("LLM Session not initialized");
@@ -108,7 +107,7 @@ class LlmModeration extends ModerationService {
     // this.session.();
     this.session.resetChatHistory();
     // console.log("Session", this.session.getChatHistory());
-    console.log("Answer:", answer);
+    // console.log("Answer:", answer);
     try {
       const lines = answer.trim().split("\n");
       let json = lines;

@@ -1,5 +1,5 @@
 import { DataSize, embedUrl, llmUrl, ruleUrl, start } from ".";
 
-start(DataSize.medium, ruleUrl);
-start(DataSize.medium, embedUrl);
-start(DataSize.medium, llmUrl);
+await start(DataSize.medium, ruleUrl);
+await start(DataSize.medium, embedUrl);
+await start(DataSize.medium, llmUrl);

@@ -30,8 +30,10 @@
     "client:short": "bun src/client/short.ts",
     "client:medium": "bun src/client/medium.ts",
     "client:long": "bun src/client/long.ts",
+    "client:rate": "bun src/client/rate-experiment.ts",
     "client:": "bun src/client/index.ts",
     "build:embeddings": "bun src/build-embeddings.ts",
+    "experiment": "bun src/client/rate-experiment.ts",
     "build:dataset": "bun src/dataset/preprocess.ts"
   },
   "type": "module",

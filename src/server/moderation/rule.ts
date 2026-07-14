@@ -103,7 +103,7 @@ function normalize(text: string): string {
 
 class RuleModeration extends ModerationService {
   override moderate(message: string): Promise<Moderation> {
-    console.log(`Rule: ${message}`);
+    // console.log(`Rule: ${message}`);
     const moderation = { ...defaultModeration, message };
     const normalizedMessage = normalize(message);
     hateWords.forEach((word) => {

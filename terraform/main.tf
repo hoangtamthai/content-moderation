@@ -71,7 +71,7 @@ resource "google_compute_instance" "server-instance" {
 
   guest_accelerator {
     count = 1
-    type  = "projects/content-moderation-502108/zones/us-central1-b/acceleratorTypes/nvidia-tesla-t4"
+    type  = "nvidia-l4"
   }
 
   metadata = {

@@ -29,6 +29,21 @@ async function writeJsonl(
 async function main(url: string, dataSize: DataSize, lambdaReqPerSec: number) {
   const count = ENV.TEST_SIZE;
   const warmup = ENV.WARMUP;
+  let datasetSize = "unknown";
+  switch (dataSize) {
+    case DataSize.short:
+      datasetSize = "short";
+      break;
+    case DataSize.medium:
+      datasetSize = "medium";
+      break;
+    case DataSize.long:
+      datasetSize = "long";
+      break;
+    default:
+      console.error("Invalid data size");
+      process.exit(1);
+  }
   const datasetPath = dataSize;
 
   console.log(`Rate experiment config:
@@ -91,8 +106,8 @@ async function main(url: string, dataSize: DataSize, lambdaReqPerSec: number) {
         inter_arrival_ms: Math.round(interArrivalMs * 100) / 100,
         method,
         lambda: lambdaReqPerSec,
-        correct: evaluateModeration(labels[i]!, prediction),
-        // original: JSON.stringify(labels[i]!),
+        correct: evaluateModeration(labels[index]!, prediction),
+        // original: JSON.stringify(labels[index]!),
         // prediction: JSON.stringify(prediction),
       });
     }
@@ -101,7 +116,7 @@ async function main(url: string, dataSize: DataSize, lambdaReqPerSec: number) {
 
   const outDir = "results";
   await Bun.spawn(["mkdir", "-p", outDir]).exited;
-  const filePath = `${outDir}/rate_${method}_l${lambdaReqPerSec}_${new Date().getTime()}.jsonl`;
+  const filePath = `${outDir}/${datasetSize}/rate_${method}_${datasetSize}_l${lambdaReqPerSec}_${new Date().getTime()}.jsonl`;
   await writeJsonl(results, filePath);
 
   console.log(`\nDone. ${results.length} samples saved to ${filePath}`);
@@ -112,6 +127,6 @@ async function main(url: string, dataSize: DataSize, lambdaReqPerSec: number) {
   console.log(`Effective throughput: ${lambdaReqPerSec} req/s (target)`);
 }
 
-await main(ruleUrl, DataSize.short, ENV.LAMBDA_RULE).catch(console.error);
-// await main(embedUrl, DataSize.short, ENV.LAMBDA_EMBED).catch(console.error);
-// await main(llmUrl, DataSize.short, ENV.LAMBDA_LLM).catch(console.error);
+await main(ruleUrl, DataSize.medium, ENV.LAMBDA_RULE).catch(console.error);
+// await main(embedUrl, DataSize.medium, ENV.LAMBDA_EMBED).catch(console.error);
+// await main(llmUrl, DataSize.medium, ENV.LAMBDA_LLM).catch(console.error);

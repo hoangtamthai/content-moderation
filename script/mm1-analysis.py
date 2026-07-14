@@ -20,7 +20,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-RESULTS_DIR = Path("results")
+RESULTS_DIR = Path("results/short")
 OUTPUT_DIR = Path("results/analysis")
 
 def load_results():
@@ -80,6 +80,9 @@ def compute_metrics(data):
         total_duration = sum(inter_arrivals) + service_times[-1] if service_times else 0
         measured_throughput = len(service_times) / total_duration if total_duration > 0 else 0
 
+        correct_flags = [r.get("correct") for r in rows if r.get("correct") is not None]
+        accuracy = statistics.mean(correct_flags) if correct_flags else None
+
         percent_error = abs(W_meas - W_pred) / W_pred * 100 if W_pred and W_pred > 0 else float("inf")
 
         metrics[(method, lam)] = {
@@ -92,6 +95,7 @@ def compute_metrics(data):
             "Lq_pred": Lq_pred,
             "error_pct": percent_error,
             "measured_throughput": measured_throughput,
+            "accuracy": accuracy,
             "service_times": service_times,
             "inter_arrivals": inter_arrivals,
         }
@@ -271,6 +275,43 @@ def plot_throughput(metrics):
     fig.savefig(OUTPUT_DIR / "throughput.png", dpi=150)
     print(f"  Saved {OUTPUT_DIR / 'throughput.png'}")
 
+def plot_accuracy_vs_latency(metrics):
+    methods = ["rule", "embed", "llm"]
+    colors = {"rule": "#2ecc71", "embed": "#3498db", "llm": "#e74c3c"}
+    markers = {"rule": "o", "embed": "s", "llm": "^"}
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    for method in methods:
+        pts = [(m["W_meas"], m["accuracy"]) for (mth, _), m in sorted(metrics.items())
+               if mth == method and m["accuracy"] is not None]
+        if not pts:
+            continue
+        pts.sort(key=lambda x: x[0])
+        latencies = [p[0] for p in pts]
+        accuracies = [p[1] for p in pts]
+        lambdas = [lam for (mth, lam), m in sorted(metrics.items())
+                   if mth == method and m["accuracy"] is not None]
+
+        ax.scatter(latencies, accuracies, color=colors[method], marker=markers[method],
+                   s=100, zorder=5, label=method.upper())
+        for l, a, lam in zip(latencies, accuracies, lambdas):
+            ax.annotate(f"λ={lam}", (l, a), textcoords="offset points",
+                        xytext=(5, 5), fontsize=8, alpha=0.7)
+
+    ax.set_xlabel("Mean latency (s)")
+    ax.set_ylabel("Accuracy")
+    ax.set_title("Accuracy vs Average Latency by Technique")
+    ax.legend()
+    ax.grid(True, alpha=0.3)
+    ax.set_xscale("log")
+    ax.set_xlim(left=None)
+
+    fig.tight_layout()
+    fig.savefig(OUTPUT_DIR / "accuracy_vs_latency.png", dpi=150)
+    print(f"  Saved {OUTPUT_DIR / 'accuracy_vs_latency.png'}")
+
+
 def main():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -290,6 +331,7 @@ def main():
     plot_service_dist(metrics)
     plot_interarrival_qq(metrics)
     plot_throughput(metrics)
+    plot_accuracy_vs_latency(metrics)
     print("\nDone. All outputs in", OUTPUT_DIR)
 
 

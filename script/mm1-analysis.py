@@ -20,8 +20,9 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-RESULTS_DIR = Path("results/short")
-OUTPUT_DIR = Path("results/analysis")
+size = "long"
+RESULTS_DIR = Path("results/" + size)
+OUTPUT_DIR = Path("results/analysis/" + size)
 
 def load_results():
     files = sorted(RESULTS_DIR.glob("rate_*.jsonl"))
@@ -77,7 +78,7 @@ def compute_metrics(data):
         ci_lower = boot_means[50]
         ci_upper = boot_means[1950]
 
-        total_duration = sum(inter_arrivals) + service_times[-1] if service_times else 0
+        total_duration = sum(inter_arrivals) + sum(service_times) if service_times else 0
         measured_throughput = len(service_times) / total_duration if total_duration > 0 else 0
 
         correct_flags = [r.get("correct") for r in rows if r.get("correct") is not None]
@@ -270,7 +271,7 @@ def plot_throughput(metrics):
         ax.legend()
         ax.grid(True, alpha=0.3)
 
-    fig.suptitle("Throughput vs Offered Load — Saturation Point")
+    fig.suptitle("Throughput vs Offered Load")
     fig.tight_layout()
     fig.savefig(OUTPUT_DIR / "throughput.png", dpi=150)
     print(f"  Saved {OUTPUT_DIR / 'throughput.png'}")

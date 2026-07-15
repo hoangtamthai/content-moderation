@@ -106,6 +106,7 @@ class LlmModeration extends ModerationService {
     const answer = await this.session.prompt(`${instruction}\n${message}`);
     // this.session.();
     this.session.resetChatHistory();
+    this.session.sequence.clearHistory();
     // console.log("Session", this.session.getChatHistory());
     // console.log("Answer:", answer);
     try {

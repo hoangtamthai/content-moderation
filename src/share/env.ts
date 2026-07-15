@@ -7,6 +7,7 @@ const envSchema = z.object({
   LAMBDA_EMBED: z.coerce.number().default(4),
   LAMBDA_LLM: z.coerce.number().default(1),
   WARMUP: z.coerce.number().default(10),
+  SIZE: z.string().default("short"),
 });
 
 // Validate process.env

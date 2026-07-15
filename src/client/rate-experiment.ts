@@ -127,6 +127,19 @@ async function main(url: string, dataSize: DataSize, lambdaReqPerSec: number) {
   console.log(`Effective throughput: ${lambdaReqPerSec} req/s (target)`);
 }
 
-await main(ruleUrl, DataSize.medium, ENV.LAMBDA_RULE).catch(console.error);
+function getSize() {
+  switch (ENV.SIZE) {
+    case "short":
+      return DataSize.short;
+    case "medium":
+      return DataSize.medium;
+    case "long":
+      return DataSize.long;
+    default:
+      return DataSize.short;
+  }
+}
+const size = getSize();
+// await main(ruleUrl, DataSize.medium, ENV.LAMBDA_RULE).catch(console.error);
 // await main(embedUrl, DataSize.medium, ENV.LAMBDA_EMBED).catch(console.error);
-// await main(llmUrl, DataSize.medium, ENV.LAMBDA_LLM).catch(console.error);
+await main(llmUrl, size, ENV.LAMBDA_LLM).catch(console.error);

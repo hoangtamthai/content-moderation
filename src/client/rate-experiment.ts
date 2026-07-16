@@ -102,8 +102,8 @@ async function main(url: string, dataSize: DataSize, lambdaReqPerSec: number) {
     const label = labels[i];
 
     const completion = postMessage(url, msg!).then((prediction) => {
-      console.log(`Request ${i + 1}/${count}`);
       const responseTimestamp = performance.now();
+      console.log(`Request ${i + 1}/${count}, latency=${responseTimestamp - arrivalTimestamp}ms`);
       return {
         index: i,
         arrivalTimestamp,

@@ -103,9 +103,9 @@ class LlmModeration extends ModerationService {
     //   systemPrompt: instruction,
     // });
     // const answer = await this.session.prompt(`${instruction}\n${message}`);
-    const answer = await this.session.prompt(`${instruction}\n${message}`);
+    const answer = await this.session.prompt(message);
     this.session.resetChatHistory();
-    this.session.sequence.clearHistory();
+    // this.session.sequence.clearHistory();
     // console.log("Session", this.session.getChatHistory());
     console.log("Answer:", answer);
     try {

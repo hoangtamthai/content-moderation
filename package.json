@@ -40,7 +40,7 @@
   "type": "module",
   "dependencies": {
     "hyparquet": "^1.26.0",
-    "node-llama-cpp": "^3.18.1",
+    "node-llama-cpp": "^3.19.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {

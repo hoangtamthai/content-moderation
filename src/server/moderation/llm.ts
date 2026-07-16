@@ -88,7 +88,7 @@ class LlmModeration extends ModerationService {
     });
   }
   override async moderate(message: string): Promise<Moderation> {
-    // console.log("LLM Moderation:", message);
+    console.log("LLM Moderation:", message);
     const moderation = { ...defaultModeration };
     moderation.message = message;
     if (!this.session) throw new Error("LLM Session not initialized");
@@ -104,11 +104,10 @@ class LlmModeration extends ModerationService {
     // });
     // const answer = await this.session.prompt(`${instruction}\n${message}`);
     const answer = await this.session.prompt(`${instruction}\n${message}`);
-    // this.session.();
     this.session.resetChatHistory();
     this.session.sequence.clearHistory();
     // console.log("Session", this.session.getChatHistory());
-    // console.log("Answer:", answer);
+    console.log("Answer:", answer);
     try {
       const lines = answer.trim().split("\n");
       let json = lines;
@@ -133,10 +132,10 @@ class LlmModeration extends ModerationService {
             moderation.violence = true;
         });
       }
-      return new Promise((resolve) => resolve(moderation));
+      return moderation;
     } catch (e) {
       console.error("Error parsing LLM answer:", e);
-      return new Promise((resolve) => resolve(moderation));
+      return moderation;
     }
   }
 }

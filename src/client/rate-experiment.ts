@@ -6,20 +6,27 @@ function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function postMessage(url: string, message: string): Promise<Moderation> {
-  const response = await fetch(url, {
-    method: "POST",
-    body: message,
-  });
-  return response.json();
+function postMessage(url: string, message: string): Promise<Moderation> {
+  return fetch(url, { method: "POST", body: message }).then((r) => r.json());
 }
 
 function exponentialInterval(lambda: number): number {
   return -Math.log(Math.random()) / lambda;
 }
 
+interface Completion {
+  index: number;
+  arrivalTimestamp: number;
+  responseTimestamp: number;
+  latencyMs: number;
+  method: string;
+  lambda: number;
+  correct: boolean;
+  interArrivalMs: number;
+}
+
 async function writeJsonl(
-  rows: Record<string, string | number | boolean | number[]>[],
+  rows: Record<string, string | number | boolean>[],
   filePath: string,
 ) {
   const lines = rows.map((r) => JSON.stringify(r)).join("\n") + "\n";
@@ -40,9 +47,6 @@ async function main(url: string, dataSize: DataSize, lambdaReqPerSec: number) {
     case DataSize.long:
       datasetSize = "long";
       break;
-    default:
-      console.error("Invalid data size");
-      process.exit(1);
   }
   const datasetPath = dataSize;
 
@@ -58,10 +62,8 @@ async function main(url: string, dataSize: DataSize, lambdaReqPerSec: number) {
 
   const file = Bun.file(datasetPath);
   const lines = (await file.text()).split("\n").filter(Boolean);
-  const data: Moderation[] = lines.map((line) => {
-    return JSON.parse(line);
-  });
-  const labels: ModerationLabel[] = data.map((l) => l);
+  const data: Moderation[] = lines.map((l) => JSON.parse(l));
+  const labels: ModerationLabel[] = data;
   const messages: string[] = data.map((l) => l.message);
 
   if (messages.length === 0) {
@@ -69,62 +71,91 @@ async function main(url: string, dataSize: DataSize, lambdaReqPerSec: number) {
     process.exit(1);
   }
 
-  const totalRuns = warmup + count;
+  // Warmup phase: fire at target rate, then wait for all to complete
+  console.log("Warmup...");
+  const warmupPromises: Promise<Moderation>[] = [];
+  for (let i = 0; i < warmup; i++) {
+    if (i > 0) {
+      await sleep(exponentialInterval(lambdaReqPerSec) * 1000);
+    }
+    console.log(`Warmup ${i + 1}/${warmup}`);
+    warmupPromises.push(postMessage(url, messages[i]!));
+  }
+  await Promise.all(warmupPromises);
+  console.log(`Warmup done (${warmup} requests)\n`);
 
-  const results: Record<string, string | number | boolean | number[]>[] = [];
-  let requestIdx = 0;
+  // Test phase: fire at target Poisson rate, non-blocking
+  const completions: Promise<Completion>[] = [];
+  const interArrivals: number[] = [];
 
-  let warmupIndex = 0;
-  for (let i = 0; i < totalRuns; i++) {
-    const isWarmup = i < warmup;
-    const index = isWarmup ? warmupIndex : i - warmup;
-    const msg = messages[index]!;
+  for (let i = 0; i < count; i++) {
     const interArrivalMs =
       i === 0 ? 0 : exponentialInterval(lambdaReqPerSec) * 1000;
+    interArrivals.push(interArrivalMs);
 
     if (interArrivalMs > 0) {
       await sleep(interArrivalMs);
     }
 
     const arrivalTimestamp = performance.now();
-    const prediction = await postMessage(url, msg);
-    const responseTimestamp = performance.now();
+    const msg = messages[i];
+    const label = labels[i];
 
-    const serviceTimeMs = responseTimestamp - arrivalTimestamp;
-
-    console.log(
-      `[${isWarmup ? "WARMUP" : "SAMPLE"}] req=${i + 1}/${totalRuns} ` +
-        `interArrival=${interArrivalMs.toFixed(1)}ms ` +
-        `service=${serviceTimeMs.toFixed(1)}ms`,
-    );
-
-    if (!isWarmup) {
-      results.push({
-        request_id: requestIdx++,
-        arrival_timestamp: arrivalTimestamp,
-        latency_ms: Math.round(serviceTimeMs * 100) / 100,
-        inter_arrival_ms: Math.round(interArrivalMs * 100) / 100,
+    const completion = postMessage(url, msg!).then((prediction) => {
+      console.log(`Request ${i + 1}/${count}`);
+      const responseTimestamp = performance.now();
+      return {
+        index: i,
+        arrivalTimestamp,
+        responseTimestamp,
+        latencyMs: responseTimestamp - arrivalTimestamp,
         method,
         lambda: lambdaReqPerSec,
-        correct: evaluateModeration(labels[index]!, prediction),
-        // original: JSON.stringify(labels[index]!),
-        // prediction: JSON.stringify(prediction),
-      });
-    }
-    warmupIndex++;
+        correct: evaluateModeration(label!, prediction),
+        interArrivalMs,
+      };
+    });
+
+    completions.push(completion);
   }
 
-  const outDir = "results";
+  const allResults = await Promise.all(completions);
+  allResults.sort((a, b) => a.index - b.index);
+
+  // Log summary
+  const latencies = allResults.map((r) => r.latencyMs);
+  const avgLat = latencies.reduce((s, v) => s + v, 0) / latencies.length;
+  const maxLat = Math.max(...latencies);
+  const totalTimeMs =
+    allResults[allResults.length - 1]?.responseTimestamp! -
+      allResults[0]?.arrivalTimestamp! || 0;
+  const throughput = (count / totalTimeMs) * 1000;
+
+  console.log(`\nResults:
+  Samples:      ${allResults.length}
+  Avg latency:  ${avgLat.toFixed(1)}ms
+  Max latency:  ${maxLat.toFixed(1)}ms
+  Total time:   ${totalTimeMs.toFixed(1)}ms
+  Throughput:   ${throughput.toFixed(2)} req/s
+`);
+
+  // Save
+  const outDir = "results2";
   await Bun.spawn(["mkdir", "-p", outDir]).exited;
-  const filePath = `${outDir}/${datasetSize}/rate_${method}_${datasetSize}_l${lambdaReqPerSec}_${new Date().getTime()}.jsonl`;
-  await writeJsonl(results, filePath);
+  const filePath = `${outDir}/${ENV.SIZE}/rate_${method}_l${lambdaReqPerSec}.jsonl`;
 
-  console.log(`\nDone. ${results.length} samples saved to ${filePath}`);
+  const rows = allResults.map((r) => ({
+    request_id: r.index,
+    arrival_timestamp: Math.round(r.arrivalTimestamp * 1000) / 1000,
+    latency_ms: Math.round(r.latencyMs * 100) / 100,
+    inter_arrival_ms: Math.round(r.interArrivalMs * 100) / 100,
+    method: r.method,
+    lambda: r.lambda,
+    correct: r.correct,
+  }));
 
-  const avgLatency =
-    results.reduce((s, r) => s + (r.latency_ms as number), 0) / results.length;
-  console.log(`Average latency: ${avgLatency.toFixed(2)}ms`);
-  console.log(`Effective throughput: ${lambdaReqPerSec} req/s (target)`);
+  await writeJsonl(rows, filePath);
+  console.log(`Saved to ${filePath}`);
 }
 
 function getSize() {
@@ -140,6 +171,6 @@ function getSize() {
   }
 }
 const size = getSize();
-// await main(ruleUrl, DataSize.medium, ENV.LAMBDA_RULE).catch(console.error);
-// await main(embedUrl, DataSize.medium, ENV.LAMBDA_EMBED).catch(console.error);
+await main(ruleUrl, size, ENV.LAMBDA_RULE).catch(console.error);
+await main(embedUrl, size, ENV.LAMBDA_EMBED).catch(console.error);
 await main(llmUrl, size, ENV.LAMBDA_LLM).catch(console.error);

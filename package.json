@@ -7,7 +7,7 @@
   },
   "private": true,
   "scripts": {
-    "server": "bun --hot src/server/index.ts",
+    "server": "bun src/server/index.ts",
     "models:pull": "node-llama-cpp pull --dir ./models https://huggingface.co/Qwen/Qwen3-8B-GGUF:Q4_K_M",
     "models:pull-nomic": "node-llama-cpp pull --dir ./models hf:nomic-ai/nomic-embed-text-v1.5-GGUF:Q8_0",
     "models:pull-bge": "node-llama-cpp pull --dir ./models https://huggingface.co/ggml-org/bge-small-en-v1.5-Q8_0-GGUF",

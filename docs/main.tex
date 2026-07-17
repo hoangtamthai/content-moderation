@@ -198,7 +198,7 @@ Then after creating the instance, a custom script will be run to pull the source
 \subsection{Data Collection}
 % Describe how you collect the data, e.g., what data you are using, which scripts are used for generating the logs, and how the logs are obtained for further analysis.
 Each experiment collect the performance of system by using logs generated from client and also the accuracy of the tested moderation module.
-In addition to the client log, server log for CPU and memory usage statistics.
+After every request, the client capture the following metrics: sending time (arrival timestamp), service time (latency), inter arrival time (time between consecutive sends), moderation method, sending rate (lambda), and a flag indicating whether the request was flagged correctly,
 
 \subsection{Data Processing and Statistics}
 % Describe how you process the raw data and which statistical methods are applied. This includes parsing the log files, pruning, and transforming the logs to a suitable format for further analysis.
@@ -363,47 +363,53 @@ The same number of samples and request rate are then used for other experiments
 % Describe and discuss the results and how/why they match or don't match the hypothesis, including, e.g., bottleneck analysis, simple performance scaling prediction.
 The results for the first experiment are shown in the following table and plots.
 The results show that the rule-based method has the best performance with the lowest average response time and highest throughput.
-However, only the rule-based method follows the M/M/1 queueing model closely, while the embedding and LLM methods deviate from the model at higher utilization levels.
+However, only the rule-based method follows the M/M/1 queueing model, while the embedding and LLM methods deviate from the model.
 
 The throughput for rule-based method increases with the sending rate until it reaches saturation and does not reach the maximum possible throughput, while the embedding and LLM methods keep increasing past the predicted saturation point until they reach new saturation and then drop off.
 The plots\ref{fig:short_throughput} show the relationship between throughput and sending rate for each moderation technique, indicating the saturation points.
+It appears that the embedding and LLM methods are done concurrently, which allows them to handle more requests than the M/M/1 model predicts.
 
+The average response time for rule-based method is around 0.5ms, while the embedding method is around 500ms and the LLM method is around 300ms.
+The accuracy of the rule-based method and embedding method stay the same when changing the sending rate, while the accuracy of the LLM method can fluctuate due to the randomness of the LLM model.
 \input{../results/analysis/short/metrics_table}
-% \begin{figure}[htbp]
-%     \centering
-%     \includegraphics[width=\textwidth]{../results/analysis/short/w_vs_rho.png}
-%     \caption{Measured vs.\ predicted mean response time \(W\) as a function of utilization \(\rho\). The solid blue line is the M/M/1 prediction using the median \(\mu\) for each technique. Red points are measured values with 95\% bootstrap confidence intervals.}
-%     \label{fig:short_w_vs_rho}
-% \end{figure}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{../results/analysis/short/w_vs_rho.png}
+    \caption{Experiment 1: Measured vs.\ predicted mean response time \(W\) as a function of utilization \(\rho\). The solid blue line is the M/M/1 prediction using the median \(\mu\) for each technique. Red points are measured values}
+    \label{fig:short_w_vs_rho}
+\end{figure}
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{../results/analysis/short/throughput.png}
-    \caption{Throughput (requests per second) as a function of sending rate. The server saturates at the maximum throughput for each moderation technique.}
+    \caption{Experiment 1: Throughput (requests per second) as a function of sending rate. The server saturates at the maximum throughput for each moderation technique.}
     \label{fig:short_throughput}
 \end{figure}
-
-
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{../results/analysis/short/accuracy_vs_latency.png}
+    \caption{Experiment 2: Accuracy vs.\ latency for each moderation technique.}
+    \label{fig:short_accuracy_vs_latency}
+\end{figure}
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{../results/analysis/short/service_dist.png}
-    \caption{Service time distributions.}
+    \caption{Experiment 1: Service time distributions.}
     \label{fig:short_service_dist}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{../results/analysis/short/interarrival_qq.png}
-    \caption{Observed inter-arrival times vs.\ theoretical exponential quantiles, validating the Poisson arrival assumption.}
+    \caption{Experiment 1: Observed inter-arrival times vs.\ theoretical exponential quantiles, validating the Poisson arrival assumption.}
     \label{fig:short_interarrival_qq}
 \end{figure}
-
-
 
 \subsection{Experiment 2: Medium message}
 % Recommended length: 1-2 pages
 Benchmark performance for medium messages that are between 100 and 1000 characters.
-
+In this experiment, most of the setup and hypothesis are similar to the first experiment, but the message length is longer.
+The main difference is that the average response time for medium messages is expected to be longer than short messages, and the throughput is lower.
 
 \subsubsection{Setup}
 \begin{itemize}
@@ -415,48 +421,56 @@ Benchmark performance for medium messages that are between 100 and 1000 characte
 \subsubsection{Hypothesis}
 \begin{itemize}
     \item Take longer average time to process than short messages
-    \item  
 \end{itemize}
 
 \subsubsection{Results and Discussion}
 The assumption made in the hypothesis is correct, the average response time for medium messages is longer than short messages for all three moderation techniques.
-The results for the second experiment are shown in the following table and plots.
+
+The experiment show that the average response time for rule-based endpoint is around 0.6ms, which is around 20\% slower than short messages.
+The embedding endpoint is around 500ms which is similar to short messages.
+But there are some cases where the embedding model takes longer time to process a message due to the length of the message.
+The LLM endpoint is around 5s.
+
+With medium messages the suggested method to use is either rule-based or embedding model since they have similar accuracy, and better for performance and cost.
 
 \input{../results/analysis/medium/metrics_table}
-% \begin{figure}[htbp]
-%     \centering
-%     \includegraphics[width=\textwidth]{../results/analysis/medium/w_vs_rho.png}
-%     \caption{Measured vs.\ predicted mean response time \(W\) as a function of utilization \(\rho\). The solid blue line is the M/M/1 prediction using the median \(\mu\) for each technique. Red points are measured values with 95\% bootstrap confidence intervals.}
-%     \label{fig:medium_w_vs_rho}
-% \end{figure}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{../results/analysis/medium/w_vs_rho.png}
+    \caption{Experiment 2: Measured vs.\ predicted mean response time \(W\) as a function of utilization \(\rho\). The solid blue line is the M/M/1 prediction using the median \(\mu\) for each technique. Red points are measured values}
+    \label{fig:medium_w_vs_rho}
+\end{figure}
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{../results/analysis/medium/throughput.png}
-    \caption{Throughput (requests per second) as a function of sending rate. The server saturates at the maximum throughput for each moderation technique.}
+    \caption{Experiment 2: Throughput (requests per second) as a function of sending rate. The server saturates at the maximum throughput for each moderation technique.}
     \label{fig:medium_throughput}
 \end{figure}
-
-
-
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{../results/analysis/medium/accuracy_vs_latency.png}
+    \caption{Experiment 2: Accuracy vs.\ latency for each moderation technique.}
+    \label{fig:medium_accuracy_vs_latency}
+\end{figure}
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{../results/analysis/medium/service_dist.png}
-    \caption{Service time distributions.}
+    \caption{Experiment 2: Service time distributions.}
     \label{fig:medium_service_dist}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{../results/analysis/medium/interarrival_qq.png}
-    \caption{Observed inter-arrival times vs.\ theoretical exponential quantiles, validating the Poisson arrival assumption.}
+    \caption{Experiment 2: Observed inter-arrival times vs.\ theoretical exponential quantiles, validating the Poisson arrival assumption.}
     \label{fig:medium_interarrival_qq}
 \end{figure}
-
-
 
 \subsection{Experiment 3: Long messages}
 % Recommended length: 1-2 pages
 Benchmark performance for long messages that are more than 1000 characters.
+With long messages, there are some case where the embedding model and LLM cannot handle the message due to the length limit of the model.
+Therefore, the test case only consider valid messages that can be processed by all three moderation techniques.
 \subsubsection{Setup}
 \begin{itemize}
     \item Start the server running Bun as a runtime.
@@ -466,39 +480,45 @@ Benchmark performance for long messages that are more than 1000 characters.
 
 \subsubsection{Hypothesis}
 \begin{itemize}
-    \item The performance should be worse among experiments
-    \item 
+    \item The performance should be the worst among experiments
 \end{itemize}
 
 \subsubsection{Results and Discussion}
-\input{../results/analysis/medium/metrics_table}
-% \begin{figure}[htbp]
-%     \centering
-%     \includegraphics[width=\textwidth]{../results/analysis/medium/w_vs_rho.png}
-%     \caption{Measured vs.\ predicted mean response time \(W\) as a function of utilization \(\rho\). The solid blue line is the M/M/1 prediction using the median \(\mu\) for each technique. Red points are measured values with 95\% bootstrap confidence intervals.}
-%     \label{fig:medium_w_vs_rho}
-% \end{figure}
-\begin{figure}[htbp]
+This experiment shows that the average response time for long messages is the longest among all three experiments as assumed in the hypothesis.
+Average time for rule endpoint is around 0.8ms (60\% slower than short messages), embedding endpoint range between 600ms to 2s, and LLM endpoint is from 2s to 20s.
+\input{../results/analysis/long/metrics_table}
+\begin{figure}[htp]
     \centering
-    \includegraphics[width=\textwidth]{../results/analysis/medium/throughput.png}
-    \caption{Throughput (requests per second) as a function of sending rate. The server saturates at the maximum throughput for each moderation technique.}
-    \label{fig:medium_throughput}
+    \includegraphics[width=\textwidth]{../results/analysis/long/w_vs_rho.png}
+    \caption{Experiment 3: Measured vs.\ predicted mean response time \(W\) as a function of utilization \(\rho\). The solid blue line is the M/M/1 prediction using the median \(\mu\) for each technique. Red points are measured values}
+    \label{fig:long_w_vs_rho}
 \end{figure}
 
-
-
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=\textwidth]{../results/analysis/long/throughput.png}
+    \caption{Experiment 3: Throughput (requests per second) as a function of sending rate. The server saturates at the maximum throughput for each moderation technique.}
+    \label{fig:long_throughput}
+\end{figure}
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{../results/analysis/medium/service_dist.png}
-    \caption{Service time distributions.}
-    \label{fig:medium_service_dist}
+    \includegraphics[width=\textwidth]{../results/analysis/long/accuracy_vs_latency.png}
+    \caption{Experiment 3: Accuracy vs.\ latency for each moderation technique.}
+    \label{fig:long_accuracy_vs_latency}
+\end{figure}
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=\textwidth]{../results/analysis/long/service_dist.png}
+    \caption{Experiment 3: Service time distributions.}
+    \label{fig:long_service_dist}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{../results/analysis/medium/interarrival_qq.png}
-    \caption{Observed inter-arrival times vs.\ theoretical exponential quantiles, validating the Poisson arrival assumption.}
-    \label{fig:medium_interarrival_qq}
+    \includegraphics[width=\textwidth]{../results/analysis/long/interarrival_qq.png}
+    \caption{Experiment 3: Observed inter-arrival times vs.\ theoretical exponential quantiles, validating the Poisson arrival assumption.}
+    \label{fig:long_interarrival_qq}
 \end{figure}
 
 
@@ -510,19 +530,34 @@ The three moderation techniques (rule-based, embedding, and small LLM) each proc
 the rule engine runs asynchronously on a single Bun thread, and both the embedding model and LLM hold exclusive GPU context via \texttt{node-llama-cpp}. This single-server behavior makes each endpoint fit for the \textbf{M/M/1} queueing model --- Markovian (Poisson) arrivals, Markovian (exponential) service times, and a single server.
 
 \subsection{Question \& Hypothesis}
-There are two main questions to answer, one concerning the modeling and the other is about which method is the best for chat moderation.
-
-The first question to answer is: \textit{How does the throughput scale with the arrival rate \(\lambda\) for each moderation technique, and at what utilization \(\rho\) does the system begin to saturate?}
+There are two main questions to answer: 
+\begin{enumerate}
+    \item How does the throughput scale with the arrival rate \(\lambda\) for each moderation technique?
+    \item Which moderation technique is the best in terms of performance and accuracy?
+\end{enumerate}
+one concerning the modeling and the other is about which method is the best for chat moderation.
 
 I hypothesize that:
 \begin{itemize}
-    \item The \textbf{rule-based} endpoint (pure CPU, near-deterministic service times \(\sigma \approx 0.2\)~ms) will fit M/M/1 well, despite its low variance, because utilization is the dominant factor.
+    \item The \textbf{rule-based} endpoint (pure CPU, near-deterministic service times \(\sigma \approx 0.4\)~ms) will fit M/M/1 well
     \item The \textbf{embedding} and \textbf{LLM} endpoints (GPU-accelerated, high variance in service times) will deviate from M/M/1 predictions at high utilization due to non-exponential service distributions.
 \end{itemize}
 
+To answer the first question, I will measure the throughput and response time for each moderation technique at different arrival rates.
+When increasing the arrival rate, the throughput increase linearly until it reaches the maximum service rate \(\mu\) and then saturate.
+However, the embedding and LLM endpoints may deviate from this behavior due to the concurrent processing capabilities of GPU.
+Only the rule-based endpoint shows a linear increase in throughput until it saturates at near the maximum service rate \(\mu\).
+
+As for the second question, I will compare the accuracy and performance of each moderation technique.
+I suggest that for short and medium messages, the rule-based and embedding methods are the best choice due to their high accuracy and the stable and low latency.
+Use case like moderate real-time chat messages, the rule-based method is the best choice since it has the lowest latency but also good accuracy, just less flexible and require more word list to cover more languages.
+With long messages like blog post, the LLM method is the best choice since it can understand the context of the message and give a more accurate result, but it has a higher and unstable latency (can be around 2 to 20 seconds for long messages) and cost (require GPU for faster inference).
+
 \subsection{Input Parameters}
 
-A controlled-rate benchmark client was implemented to generate Poisson arrivals with a target rate \(\lambda\) (requests per second). For each technique, I collected 100 samples at five different arrival rates spanning from less than half saturation to over the saturation point.
+A controlled-rate benchmark client was implemented to generate Poisson arrivals with a target rate \(\lambda\) (requests per second).
+For each technique, I ran 100 samples at five different arrival rates spanning from less than half saturation to over the saturation point.
+The main metrics used for modeling are the measured service times (latency).
 
 The service rate \(\mu\) was estimated from the measured service times (or called latency):
 \[
@@ -530,16 +565,22 @@ The service rate \(\mu\) was estimated from the measured service times (or calle
 \]
 where \(\overline{S}\) is the sample mean. The utilization is then \(\rho = \lambda / \mu\). For a stable M/M/1 queue, \(\rho < 1\).
 
-Table~\ref{tab:mm1} summarizes the measured parameters and model predictions.
-
 \subsection{Results}
+
+The results of the modeling shown in above experiments are summarized in the three tables: Table~\ref{tab:short_mm1-metrics}, Table~\ref{tab:medium_mm1-metrics}, and Table~\ref{tab:long_mm1-metrics}.
+The measured mean response time \(W\) is plotted against the predicted M/M/1 response time for each technique.
+The Mean response time \(W\) plot indicates that the model does not fit the methods implemented.
+
+The reason for this could be that while there is only one server, the server can handle multiple requests at the same time and run concurrently.
+So even though there is a queue build up but it does not affect the response time as much as the M/M/1 model predicts.
+
 
 % \input{../results/analysis/metrics_table}
 
 % \begin{figure}[htbp]
 %     \centering
 %     \includegraphics[width=\textwidth]{../results/analysis/w_vs_rho.png}
-%     \caption{Measured vs.\ predicted mean response time \(W\) as a function of utilization \(\rho\). The solid blue line is the M/M/1 prediction using the median \(\mu\) for each technique. Red points are measured values with 95\% bootstrap confidence intervals.}
+%     \caption{Measured vs.\ predicted mean response time \(W\) as a function of utilization \(\rho\). The solid blue line is the M/M/1 prediction using the median \(\mu\) for each technique. Red points are measured values}
 %     \label{fig:w_vs_rho}
 % \end{figure}
 
@@ -559,13 +600,15 @@ Table~\ref{tab:mm1} summarizes the measured parameters and model predictions.
 
 \subsection{Discussion}
 
-The rule-based endpoint matches the M/M/1 model closely across all utilization levels (error \(<5\%\)). Although its service times are nearly deterministic (\(\text{CV} \ll 1\)), the M/M/1 prediction remains accurate because the queueing dynamics are dominated by arrival variability at moderate-to-high \(\rho\).
+The rule-based endpoint matches the M/M/1 model closely in the throughput. 
+When the request rate increases, the throughput increases linearly until it saturates near the maximum service rate \(\mu\).
 
-The embedding model shows good agreement at low \(\rho\) but begins deviating above \(\rho \approx 0.6\).
+The embedding model shows good agreement at low \(\rho\) but begins deviating above \(\rho \approx 0.8\).
 
 The LLM endpoint exhibits the largest deviation. Service times are heavy-tailed (some prompts generate significantly more tokens, prolonging inference). The M/M/1 model systematically underpredicts response time at high utilization because the true service distribution has a much heavier tail than exponential.
 
-If we were to refine the model, the \textbf{M/G/1} queue (Pollaczek--Khinchine formula) would be a better fit for the embedding and LLM endpoints, as it only requires the mean and variance of the service time without assuming a specific distribution.
+I think the choice with M/M/1 model is not the best fit for this project since the prediction does not match the actual result for embedding and LLM techniques.
+If I have to choose again, a M/M/c model would probably be a better choice since the server can handle multiple requests at the same time and not just one request at a time.
 
 \bibliographystyle{plain}
 \bibliography{refs.bib}

@@ -20,9 +20,9 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-size = "short"
+# size = "short"
 # size = "medium"
-# size = "long"
+size = "long"
 results = "results/"
 RESULTS_DIR = Path(results + size)
 OUTPUT_DIR = Path(results +"analysis/" + size)
@@ -153,7 +153,7 @@ def generate_latex_table(metrics):
         r"\begin{table}[htbp]",
         r"\centering",
         r"\caption{" + experiment + ": M/M/1 queueing model parameters and validation across APIs}",
-        r"\label{tab:mm1-metrics}",
+        r"\label{tab:"+ size + "_mm1-metrics}",
         r"\begin{tabular}{lccccccc}",
         r"\toprule",
         r"API & $\lambda$ (req/s) & $\mu$ (req/s) & $\rho$ & $W_{\text{pred}}$ (s) & $W_{\text{meas}}$ (s) & \%err \\",
@@ -170,7 +170,7 @@ def generate_latex_table(metrics):
 
         # ci = m["W_ci"]
         # ci_str = f"$[{ci[0]:.3f},\;{ci[1]:.3f}]$"
-        err_str = f"${m['error_pct']:.1f}\%$" if m["error_pct"] != float("inf") else "N/A"
+        err_str = f"${m['error_pct']:.1f}\\%$" if m["error_pct"] != float("inf") else "N/A"
         lines.append(
             f"{method} & ${lam:.2f}$ & ${m['mu']:.4f}$ & {rho_str} "
             f"& {W_pred_str} & ${m['W_meas']:.4f}$ & {err_str} \\\\"

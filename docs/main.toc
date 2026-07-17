@@ -1,0 +1,30 @@
+\babel@toc {english}{}\relax 
+\contentsline {section}{\numberline {1}Application Description and Design}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}General Description}{2}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Detailed Description of Modules Under Test}{2}{subsection.1.2}%
+\contentsline {section}{\numberline {2}Benchmark Harness Design / Application Changes}{2}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Code Changes for Logging (and Benchmark Client)}{3}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Scripts for Running Experiments}{3}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Data Collection}{3}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Data Processing and Statistics}{3}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}Plotting Method}{4}{subsection.2.5}%
+\contentsline {section}{\numberline {3}Experiments}{4}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Environment}{5}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Experiment 1: Short message}{5}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}Setup}{5}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}Hypothesis}{5}{subsubsection.3.2.2}%
+\contentsline {subsubsection}{\numberline {3.2.3}Results and Discussion}{6}{subsubsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.3}Experiment 2: Medium message}{6}{subsection.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.1}Setup}{9}{subsubsection.3.3.1}%
+\contentsline {subsubsection}{\numberline {3.3.2}Hypothesis}{9}{subsubsection.3.3.2}%
+\contentsline {subsubsection}{\numberline {3.3.3}Results and Discussion}{9}{subsubsection.3.3.3}%
+\contentsline {subsection}{\numberline {3.4}Experiment 3: Long messages}{9}{subsection.3.4}%
+\contentsline {subsubsection}{\numberline {3.4.1}Setup}{9}{subsubsection.3.4.1}%
+\contentsline {subsubsection}{\numberline {3.4.2}Hypothesis}{12}{subsubsection.3.4.2}%
+\contentsline {subsubsection}{\numberline {3.4.3}Results and Discussion}{12}{subsubsection.3.4.3}%
+\contentsline {section}{\numberline {4}Modeling of the Application}{12}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Question \& Hypothesis}{15}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Input Parameters}{15}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Results}{15}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Discussion}{16}{subsection.4.4}%
+\providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

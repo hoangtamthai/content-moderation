@@ -31,63 +31,131 @@
 \@writefile{toc}{\contentsline {section}{\numberline {2}Benchmark Harness Design / Application Changes}{2}{section.2}\protected@file@percent }
 \newlabel{section2}{{2}{2}{Benchmark Harness Design / Application Changes}{section.2}{}}
 \newlabel{section2@cref}{{[section][2][]2}{[1][2][]2}{}{}{}}
-\BKM@entry{id=6,dest={73756273656374696F6E2E322E32},srcline={186},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030535C303030635C303030725C303030695C303030705C303030745C303030735C3030305C3034305C303030665C3030306F5C303030725C3030305C3034305C303030525C303030755C3030306E5C3030306E5C303030695C3030306E5C303030675C3030305C3034305C303030455C303030785C303030705C303030655C303030725C303030695C3030306D5C303030655C3030306E5C303030745C30303073}
-\BKM@entry{id=7,dest={73756273656374696F6E2E322E33},srcline={197},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030445C303030615C303030745C303030615C3030305C3034305C303030435C3030306F5C3030306C5C3030306C5C303030655C303030635C303030745C303030695C3030306F5C3030306E}
-\BKM@entry{id=8,dest={73756273656374696F6E2E322E34},srcline={202},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030445C303030615C303030745C303030615C3030305C3034305C303030505C303030725C3030306F5C303030635C303030655C303030735C303030735C303030695C3030306E5C303030675C3030305C3034305C303030615C3030306E5C303030645C3030305C3034305C303030535C303030745C303030615C303030745C303030695C303030735C303030745C303030695C303030635C30303073}
-\BKM@entry{id=9,dest={73756273656374696F6E2E322E35},srcline={207},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030505C3030306C5C3030306F5C303030745C303030745C303030695C3030306E5C303030675C3030305C3034305C3030304D5C303030655C303030745C303030685C3030306F5C30303064}
+\BKM@entry{id=6,dest={73756273656374696F6E2E322E32},srcline={187},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030535C303030635C303030725C303030695C303030705C303030745C303030735C3030305C3034305C303030665C3030306F5C303030725C3030305C3034305C303030525C303030755C3030306E5C3030306E5C303030695C3030306E5C303030675C3030305C3034305C303030455C303030785C303030705C303030655C303030725C303030695C3030306D5C303030655C3030306E5C303030745C30303073}
+\BKM@entry{id=7,dest={73756273656374696F6E2E322E33},srcline={198},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030445C303030615C303030745C303030615C3030305C3034305C303030435C3030306F5C3030306C5C3030306C5C303030655C303030635C303030745C303030695C3030306F5C3030306E}
+\BKM@entry{id=8,dest={73756273656374696F6E2E322E34},srcline={203},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030445C303030615C303030745C303030615C3030305C3034305C303030505C303030725C3030306F5C303030635C303030655C303030735C303030735C303030695C3030306E5C303030675C3030305C3034305C303030615C3030306E5C303030645C3030305C3034305C303030535C303030745C303030615C303030745C303030695C303030735C303030745C303030695C303030635C30303073}
+\BKM@entry{id=9,dest={73756273656374696F6E2E322E35},srcline={208},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030505C3030306C5C3030306F5C303030745C303030745C303030695C3030306E5C303030675C3030305C3034305C3030304D5C303030655C303030745C303030685C3030306F5C30303064}
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Overall design of the benchmark system}}{3}{figure.1}\protected@file@percent }
 \newlabel{fig:flow}{{1}{3}{Overall design of the benchmark system}{figure.1}{}}
 \newlabel{fig:flow@cref}{{[figure][1][]1}{[1][2][]3}{}{}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Code Changes for Logging (and Benchmark Client)}{3}{subsection.2.1}\protected@file@percent }
+\newlabel{code-change}{{2.1}{3}{Code Changes for Logging (and Benchmark Client)}{subsection.2.1}{}}
+\newlabel{code-change@cref}{{[subsection][1][2]2.1}{[1][2][]3}{}{}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Scripts for Running Experiments}{3}{subsection.2.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Data Collection}{3}{subsection.2.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Data Processing and Statistics}{3}{subsection.2.4}\protected@file@percent }
-\BKM@entry{id=10,dest={73656374696F6E2E33},srcline={211},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030455C303030785C303030705C303030655C303030725C303030695C3030306D5C303030655C3030306E5C303030745C30303073}
+\BKM@entry{id=10,dest={73656374696F6E2E33},srcline={212},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030455C303030785C303030705C303030655C303030725C303030695C3030306D5C303030655C3030306E5C303030745C30303073}
 \citation{cost-effective-moderation}
 \citation{cost-effective-moderation}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Plotting Method}{4}{subsection.2.5}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {3}Experiments}{4}{section.3}\protected@file@percent }
 \newlabel{section3}{{3}{4}{Experiments}{section.3}{}}
 \newlabel{section3@cref}{{[section][3][]3}{[1][4][]4}{}{}{}}
-\BKM@entry{id=11,dest={73756273656374696F6E2E332E31},srcline={319},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030455C3030306E5C303030765C303030695C303030725C3030306F5C3030306E5C3030306D5C303030655C3030306E5C30303074}
-\BKM@entry{id=12,dest={73756273656374696F6E2E332E32},srcline={336},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030455C303030785C303030705C303030655C303030725C303030695C3030306D5C303030655C3030306E5C303030745C3030305C3034305C303030315C3030303A5C3030305C3034305C303030535C303030685C3030306F5C303030725C303030745C3030305C3034305C3030306D5C303030655C303030735C303030735C303030615C303030675C30303065}
-\BKM@entry{id=13,dest={73756273756273656374696F6E2E332E322E31},srcline={344},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030535C303030655C303030745C303030755C30303070}
-\BKM@entry{id=14,dest={73756273756273656374696F6E2E332E322E32},srcline={352},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030485C303030795C303030705C3030306F5C303030745C303030685C303030655C303030735C303030695C30303073}
-\BKM@entry{id=15,dest={73756273756273656374696F6E2E332E322E33},srcline={360},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030525C303030655C303030735C303030755C3030306C5C303030745C303030735C3030305C3034305C303030615C3030306E5C303030645C3030305C3034305C303030445C303030695C303030735C303030635C303030755C303030735C303030735C303030695C3030306F5C3030306E}
+\BKM@entry{id=11,dest={73756273656374696F6E2E332E31},srcline={321},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030455C3030306E5C303030765C303030695C303030725C3030306F5C3030306E5C3030306D5C303030655C3030306E5C30303074}
+\BKM@entry{id=12,dest={73756273656374696F6E2E332E32},srcline={338},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030455C303030785C303030705C303030655C303030725C303030695C3030306D5C303030655C3030306E5C303030745C3030305C3034305C303030315C3030303A5C3030305C3034305C303030535C303030685C3030306F5C303030725C303030745C3030305C3034305C3030306D5C303030655C303030735C303030735C303030615C303030675C30303065}
+\BKM@entry{id=13,dest={73756273756273656374696F6E2E332E322E31},srcline={346},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030535C303030655C303030745C303030755C30303070}
+\BKM@entry{id=14,dest={73756273756273656374696F6E2E332E322E32},srcline={354},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030485C303030795C303030705C3030306F5C303030745C303030685C303030655C303030735C303030695C30303073}
+\BKM@entry{id=15,dest={73756273756273656374696F6E2E332E322E33},srcline={362},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030525C303030655C303030735C303030755C3030306C5C303030745C303030735C3030305C3034305C303030615C3030306E5C303030645C3030305C3034305C303030445C303030695C303030735C303030635C303030755C303030735C303030735C303030695C3030306F5C3030306E}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Environment}{5}{subsection.3.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Experiment 1: Short message}{5}{subsection.3.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.1}Setup}{5}{subsubsection.3.2.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.2}Hypothesis}{5}{subsubsection.3.2.2}\protected@file@percent }
-\BKM@entry{id=16,dest={73756273656374696F6E2E332E33},srcline={401},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030455C303030785C303030705C303030655C303030725C303030695C3030306D5C303030655C3030306E5C303030745C3030305C3034305C303030325C3030303A5C3030305C3034305C3030304D5C303030655C303030645C303030695C303030755C3030306D5C3030305C3034305C3030306D5C303030655C303030735C303030735C303030615C303030675C30303065}
-\BKM@entry{id=17,dest={73756273756273656374696F6E2E332E332E31},srcline={406},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030535C303030655C303030745C303030755C30303070}
+\BKM@entry{id=16,dest={73756273656374696F6E2E332E33},srcline={408},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030455C303030785C303030705C303030655C303030725C303030695C3030306D5C303030655C3030306E5C303030745C3030305C3034305C303030325C3030303A5C3030305C3034305C3030304D5C303030655C303030645C303030695C303030755C3030306D5C3030305C3034305C3030306D5C303030655C303030735C303030735C303030615C303030675C30303065}
+\BKM@entry{id=17,dest={73756273756273656374696F6E2E332E332E31},srcline={414},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030535C303030655C303030745C303030755C30303070}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.3}Results and Discussion}{6}{subsubsection.3.2.3}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Throughput (requests per second) as a function of sending rate. The server saturates at the maximum throughput for each moderation technique.}}{6}{figure.2}\protected@file@percent }
-\newlabel{fig:short_throughput}{{2}{6}{Throughput (requests per second) as a function of sending rate. The server saturates at the maximum throughput for each moderation technique}{figure.2}{}}
-\newlabel{fig:short_throughput@cref}{{[figure][2][]2}{[1][6][]6}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces M/M/1 queueing model parameters and validation across APIs}}{6}{table.1}\protected@file@percent }
-\newlabel{tab:mm1-metrics}{{1}{6}{M/M/1 queueing model parameters and validation across APIs}{table.1}{}}
-\newlabel{tab:mm1-metrics@cref}{{[table][1][]1}{[1][6][]6}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Experiment 1: M/M/1 queueing model parameters and validation across APIs}}{6}{table.1}\protected@file@percent }
+\newlabel{tab:short_mm1-metrics}{{1}{6}{Experiment 1: M/M/1 queueing model parameters and validation across APIs}{table.1}{}}
+\newlabel{tab:short_mm1-metrics@cref}{{[table][1][]1}{[1][6][]6}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Experiment 1: Measured vs.\ predicted mean response time \(W\) as a function of utilization \(\rho \). The solid blue line is the M/M/1 prediction using the median \(\mu \) for each technique. Red points are measured values}}{6}{figure.2}\protected@file@percent }
+\newlabel{fig:short_w_vs_rho}{{2}{6}{Experiment 1: Measured vs.\ predicted mean response time \(W\) as a function of utilization \(\rho \). The solid blue line is the M/M/1 prediction using the median \(\mu \) for each technique. Red points are measured values}{figure.2}{}}
+\newlabel{fig:short_w_vs_rho@cref}{{[figure][2][]2}{[1][6][]6}{}{}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Experiment 2: Medium message}{6}{subsection.3.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.1}Setup}{6}{subsubsection.3.3.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Service time distributions.}}{7}{figure.3}\protected@file@percent }
-\newlabel{fig:short_service_dist}{{3}{7}{Service time distributions}{figure.3}{}}
-\newlabel{fig:short_service_dist@cref}{{[figure][3][]3}{[1][6][]7}{}{}{}}
-\BKM@entry{id=18,dest={73756273756273656374696F6E2E332E332E32},srcline={413},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030485C303030795C303030705C3030306F5C303030745C303030685C303030655C303030735C303030695C30303073}
-\BKM@entry{id=19,dest={73756273756273656374696F6E2E332E332E33},srcline={419},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030525C303030655C303030735C303030755C3030306C5C303030745C303030735C3030305C3034305C303030615C3030306E5C303030645C3030305C3034305C303030445C303030695C303030735C303030635C303030755C303030735C303030735C303030695C3030306F5C3030306E}
-\BKM@entry{id=20,dest={73756273656374696F6E2E332E34},srcline={423},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030455C303030785C303030705C303030655C303030725C303030695C3030306D5C303030655C3030306E5C303030745C3030305C3034305C303030335C3030303A5C3030305C3034305C3030304C5C3030306F5C3030306E5C303030675C3030305C3034305C3030306D5C303030655C303030735C303030735C303030615C303030675C303030655C30303073}
-\BKM@entry{id=21,dest={73756273756273656374696F6E2E332E342E31},srcline={426},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030535C303030655C303030745C303030755C30303070}
-\BKM@entry{id=22,dest={73756273756273656374696F6E2E332E342E32},srcline={433},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030485C303030795C303030705C3030306F5C303030745C303030685C303030655C303030735C303030695C30303073}
-\BKM@entry{id=23,dest={73756273756273656374696F6E2E332E342E33},srcline={439},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030525C303030655C303030735C303030755C3030306C5C303030745C303030735C3030305C3034305C303030615C3030306E5C303030645C3030305C3034305C303030445C303030695C303030735C303030635C303030755C303030735C303030735C303030695C3030306F5C3030306E}
-\BKM@entry{id=24,dest={73656374696F6E2E34},srcline={442},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C3030304D5C3030306F5C303030645C303030655C3030306C5C303030695C3030306E5C303030675C3030305C3034305C3030306F5C303030665C3030305C3034305C303030745C303030685C303030655C3030305C3034305C303030415C303030705C303030705C3030306C5C303030695C303030635C303030615C303030745C303030695C3030306F5C3030306E}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Observed inter-arrival times vs.\ theoretical exponential quantiles, validating the Poisson arrival assumption.}}{8}{figure.4}\protected@file@percent }
-\newlabel{fig:short_interarrival_qq}{{4}{8}{Observed inter-arrival times vs.\ theoretical exponential quantiles, validating the Poisson arrival assumption}{figure.4}{}}
-\newlabel{fig:short_interarrival_qq@cref}{{[figure][4][]4}{[1][6][]8}{}{}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.2}Hypothesis}{8}{subsubsection.3.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.3}Results and Discussion}{8}{subsubsection.3.3.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Experiment 3: Long messages}{8}{subsection.3.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.1}Setup}{8}{subsubsection.3.4.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.2}Hypothesis}{8}{subsubsection.3.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.3}Results and Discussion}{8}{subsubsection.3.4.3}\protected@file@percent }
-\BKM@entry{id=25,dest={73756273656374696F6E2E342E31},srcline={449},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030515C303030755C303030655C303030735C303030745C303030695C3030306F5C3030306E5C3030305C3034305C3030305C3034365C3030305C3034305C303030485C303030795C303030705C3030306F5C303030745C303030685C303030655C303030735C303030695C30303073}
-\BKM@entry{id=26,dest={73756273656374696F6E2E342E32},srcline={460},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030495C3030306E5C303030705C303030755C303030745C3030305C3034305C303030505C303030615C303030725C303030615C3030306D5C303030655C303030745C303030655C303030725C30303073}
-\BKM@entry{id=27,dest={73756273656374696F6E2E342E33},srcline={472},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030525C303030655C303030735C303030755C3030306C5C303030745C30303073}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Experiment 1: Throughput (requests per second) as a function of sending rate. The server saturates at the maximum throughput for each moderation technique.}}{7}{figure.3}\protected@file@percent }
+\newlabel{fig:short_throughput}{{3}{7}{Experiment 1: Throughput (requests per second) as a function of sending rate. The server saturates at the maximum throughput for each moderation technique}{figure.3}{}}
+\newlabel{fig:short_throughput@cref}{{[figure][3][]3}{[1][6][]7}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Experiment 2: Accuracy vs.\ latency for each moderation technique.}}{7}{figure.4}\protected@file@percent }
+\newlabel{fig:short_accuracy_vs_latency}{{4}{7}{Experiment 2: Accuracy vs.\ latency for each moderation technique}{figure.4}{}}
+\newlabel{fig:short_accuracy_vs_latency@cref}{{[figure][4][]4}{[1][6][]7}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Experiment 1: Service time distributions.}}{8}{figure.5}\protected@file@percent }
+\newlabel{fig:short_service_dist}{{5}{8}{Experiment 1: Service time distributions}{figure.5}{}}
+\newlabel{fig:short_service_dist@cref}{{[figure][5][]5}{[1][6][]8}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Experiment 1: Observed inter-arrival times vs.\ theoretical exponential quantiles, validating the Poisson arrival assumption.}}{8}{figure.6}\protected@file@percent }
+\newlabel{fig:short_interarrival_qq}{{6}{8}{Experiment 1: Observed inter-arrival times vs.\ theoretical exponential quantiles, validating the Poisson arrival assumption}{figure.6}{}}
+\newlabel{fig:short_interarrival_qq@cref}{{[figure][6][]6}{[1][6][]8}{}{}{}}
+\BKM@entry{id=18,dest={73756273756273656374696F6E2E332E332E32},srcline={421},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030485C303030795C303030705C3030306F5C303030745C303030685C303030655C303030735C303030695C30303073}
+\BKM@entry{id=19,dest={73756273756273656374696F6E2E332E332E33},srcline={426},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030525C303030655C303030735C303030755C3030306C5C303030745C303030735C3030305C3034305C303030615C3030306E5C303030645C3030305C3034305C303030445C303030695C303030735C303030635C303030755C303030735C303030735C303030695C3030306F5C3030306E}
+\BKM@entry{id=20,dest={73756273656374696F6E2E332E34},srcline={469},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030455C303030785C303030705C303030655C303030725C303030695C3030306D5C303030655C3030306E5C303030745C3030305C3034305C303030335C3030303A5C3030305C3034305C3030304C5C3030306F5C3030306E5C303030675C3030305C3034305C3030306D5C303030655C303030735C303030735C303030615C303030675C303030655C30303073}
+\BKM@entry{id=21,dest={73756273756273656374696F6E2E332E342E31},srcline={474},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030535C303030655C303030745C303030755C30303070}
+\BKM@entry{id=22,dest={73756273756273656374696F6E2E332E342E32},srcline={481},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030485C303030795C303030705C3030306F5C303030745C303030685C303030655C303030735C303030695C30303073}
+\BKM@entry{id=23,dest={73756273756273656374696F6E2E332E342E33},srcline={486},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030525C303030655C303030735C303030755C3030306C5C303030745C303030735C3030305C3034305C303030615C3030306E5C303030645C3030305C3034305C303030445C303030695C303030735C303030635C303030755C303030735C303030735C303030695C3030306F5C3030306E}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.1}Setup}{9}{subsubsection.3.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.2}Hypothesis}{9}{subsubsection.3.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.3}Results and Discussion}{9}{subsubsection.3.3.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Experiment 2: M/M/1 queueing model parameters and validation across APIs}}{9}{table.2}\protected@file@percent }
+\newlabel{tab:medium_mm1-metrics}{{2}{9}{Experiment 2: M/M/1 queueing model parameters and validation across APIs}{table.2}{}}
+\newlabel{tab:medium_mm1-metrics@cref}{{[table][2][]2}{[1][9][]9}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Experiment 3: Long messages}{9}{subsection.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.1}Setup}{9}{subsubsection.3.4.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Experiment 2: Measured vs.\ predicted mean response time \(W\) as a function of utilization \(\rho \). The solid blue line is the M/M/1 prediction using the median \(\mu \) for each technique. Red points are measured values}}{10}{figure.7}\protected@file@percent }
+\newlabel{fig:medium_w_vs_rho}{{7}{10}{Experiment 2: Measured vs.\ predicted mean response time \(W\) as a function of utilization \(\rho \). The solid blue line is the M/M/1 prediction using the median \(\mu \) for each technique. Red points are measured values}{figure.7}{}}
+\newlabel{fig:medium_w_vs_rho@cref}{{[figure][7][]7}{[1][9][]10}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Experiment 2: Throughput (requests per second) as a function of sending rate. The server saturates at the maximum throughput for each moderation technique.}}{10}{figure.8}\protected@file@percent }
+\newlabel{fig:medium_throughput}{{8}{10}{Experiment 2: Throughput (requests per second) as a function of sending rate. The server saturates at the maximum throughput for each moderation technique}{figure.8}{}}
+\newlabel{fig:medium_throughput@cref}{{[figure][8][]8}{[1][9][]10}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Experiment 2: Accuracy vs.\ latency for each moderation technique.}}{11}{figure.9}\protected@file@percent }
+\newlabel{fig:medium_accuracy_vs_latency}{{9}{11}{Experiment 2: Accuracy vs.\ latency for each moderation technique}{figure.9}{}}
+\newlabel{fig:medium_accuracy_vs_latency@cref}{{[figure][9][]9}{[1][9][]11}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Experiment 2: Service time distributions.}}{11}{figure.10}\protected@file@percent }
+\newlabel{fig:medium_service_dist}{{10}{11}{Experiment 2: Service time distributions}{figure.10}{}}
+\newlabel{fig:medium_service_dist@cref}{{[figure][10][]10}{[1][9][]11}{}{}{}}
+\BKM@entry{id=24,dest={73656374696F6E2E34},srcline={525},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C3030304D5C3030306F5C303030645C303030655C3030306C5C303030695C3030306E5C303030675C3030305C3034305C3030306F5C303030665C3030305C3034305C303030745C303030685C303030655C3030305C3034305C303030415C303030705C303030705C3030306C5C303030695C303030635C303030615C303030745C303030695C3030306F5C3030306E}
+\BKM@entry{id=25,dest={73756273656374696F6E2E342E31},srcline={532},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030515C303030755C303030655C303030735C303030745C303030695C3030306F5C3030306E5C3030305C3034305C3030305C3034365C3030305C3034305C303030485C303030795C303030705C3030306F5C303030745C303030685C303030655C303030735C303030695C30303073}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Experiment 2: Observed inter-arrival times vs.\ theoretical exponential quantiles, validating the Poisson arrival assumption.}}{12}{figure.11}\protected@file@percent }
+\newlabel{fig:medium_interarrival_qq}{{11}{12}{Experiment 2: Observed inter-arrival times vs.\ theoretical exponential quantiles, validating the Poisson arrival assumption}{figure.11}{}}
+\newlabel{fig:medium_interarrival_qq@cref}{{[figure][11][]11}{[1][9][]12}{}{}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.2}Hypothesis}{12}{subsubsection.3.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.3}Results and Discussion}{12}{subsubsection.3.4.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Experiment 3: M/M/1 queueing model parameters and validation across APIs}}{12}{table.3}\protected@file@percent }
+\newlabel{tab:long_mm1-metrics}{{3}{12}{Experiment 3: M/M/1 queueing model parameters and validation across APIs}{table.3}{}}
+\newlabel{tab:long_mm1-metrics@cref}{{[table][3][]3}{[1][9][]12}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Modeling of the Application}{12}{section.4}\protected@file@percent }
+\newlabel{section4}{{4}{12}{Modeling of the Application}{section.4}{}}
+\newlabel{section4@cref}{{[section][4][]4}{[1][12][]12}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces Experiment 3: Measured vs.\ predicted mean response time \(W\) as a function of utilization \(\rho \). The solid blue line is the M/M/1 prediction using the median \(\mu \) for each technique. Red points are measured values}}{13}{figure.12}\protected@file@percent }
+\newlabel{fig:long_w_vs_rho}{{12}{13}{Experiment 3: Measured vs.\ predicted mean response time \(W\) as a function of utilization \(\rho \). The solid blue line is the M/M/1 prediction using the median \(\mu \) for each technique. Red points are measured values}{figure.12}{}}
+\newlabel{fig:long_w_vs_rho@cref}{{[figure][12][]12}{[1][9][]13}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces Experiment 3: Throughput (requests per second) as a function of sending rate. The server saturates at the maximum throughput for each moderation technique.}}{13}{figure.13}\protected@file@percent }
+\newlabel{fig:long_throughput}{{13}{13}{Experiment 3: Throughput (requests per second) as a function of sending rate. The server saturates at the maximum throughput for each moderation technique}{figure.13}{}}
+\newlabel{fig:long_throughput@cref}{{[figure][13][]13}{[1][12][]13}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces Experiment 3: Accuracy vs.\ latency for each moderation technique.}}{14}{figure.14}\protected@file@percent }
+\newlabel{fig:long_accuracy_vs_latency}{{14}{14}{Experiment 3: Accuracy vs.\ latency for each moderation technique}{figure.14}{}}
+\newlabel{fig:long_accuracy_vs_latency@cref}{{[figure][14][]14}{[1][12][]14}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces Experiment 3: Service time distributions.}}{14}{figure.15}\protected@file@percent }
+\newlabel{fig:long_service_dist}{{15}{14}{Experiment 3: Service time distributions}{figure.15}{}}
+\newlabel{fig:long_service_dist@cref}{{[figure][15][]15}{[1][12][]14}{}{}{}}
+\BKM@entry{id=26,dest={73756273656374696F6E2E342E32},srcline={556},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030495C3030306E5C303030705C303030755C303030745C3030305C3034305C303030505C303030615C303030725C303030615C3030306D5C303030655C303030745C303030655C303030725C30303073}
+\BKM@entry{id=27,dest={73756273656374696F6E2E342E33},srcline={568},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030525C303030655C303030735C303030755C3030306C5C303030745C30303073}
+\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces Experiment 3: Observed inter-arrival times vs.\ theoretical exponential quantiles, validating the Poisson arrival assumption.}}{15}{figure.16}\protected@file@percent }
+\newlabel{fig:long_interarrival_qq}{{16}{15}{Experiment 3: Observed inter-arrival times vs.\ theoretical exponential quantiles, validating the Poisson arrival assumption}{figure.16}{}}
+\newlabel{fig:long_interarrival_qq@cref}{{[figure][16][]16}{[1][12][]15}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Question \& Hypothesis}{15}{subsection.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Input Parameters}{15}{subsection.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Results}{15}{subsection.4.3}\protected@file@percent }
+\BKM@entry{id=28,dest={73756273656374696F6E2E342E34},srcline={601},srcfile={2F686F6D652F74616D2F70726F6A656374732F636F6E74656E742D6D6F6465726174696F6E2F646F63732F6D61696E2E746578}}{5C3337365C3337375C303030445C303030695C303030735C303030635C303030755C303030735C303030735C303030695C3030306F5C3030306E}
+\bibstyle{plain}
+\bibdata{refs.bib}
+\bibcite{text-moderation-01}{1}
+\bibcite{cost-effective-moderation}{2}
+\bibcite{ldnoobw-list}{3}
+\bibcite{localmod}{4}
+\bibcite{openai-moderation-api-evaluation}{5}
+\bibcite{bun-runtime}{6}
+\bibcite{scam-data}{7}
+\bibcite{tam-github}{8}
+\bibcite{hate-speech}{9}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Discussion}{16}{subsection.4.4}\protected@file@percent }
+\global\@namedef{scr@dte@section@lastmaxnumwidth}{8.75694pt}
+\global\@namedef{scr@dte@subsection@lastmaxnumwidth}{16.10994pt}
+\global\@namedef{scr@dte@subsubsection@lastmaxnumwidth}{23.61594pt}
+\@writefile{toc}{\providecommand\tocbasic@end@toc@file{}\tocbasic@end@toc@file}
+\gdef \@abspage@last{16}

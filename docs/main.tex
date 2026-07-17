@@ -169,6 +169,7 @@ The moderation data will include the following 5 labels that is used to classify
 \end{enumerate}
 
 \subsection{Code Changes for Logging (and Benchmark Client)}
+\label{code-change}
 % Describe the code changes needed for enabling logging and explain the benchmark client (if applicable). This means writing about what lines are added to get the log and what log format/logging methodology is used. Furthermore, describe how you instrument your code, e.g., using a benchmark client, and explain how it works. Also, explain the possible impact of these changes. Also, describe how you converted your application into a client/server architecture, if applicable, and how the client has been designed for the part of the application that is to be tested.
 The project is about content moderation so the benchmark will not only show the performance of the system but also the accuracy of each module.
 Each module will be benchmarked by a client test data from the dataset.
@@ -211,105 +212,48 @@ Plotting data using Python and Matplotlib.
 \section{Experiments}
 \label{section3}
 This section will show three different experiments.
-Each experiment cover one message moderation technique using a client-server architecture.
+Each experiment cover three message moderation techniques with different running time and accuracy.
+All experiments using a client-server architecture but only with different message length.
+First experiment is tested on short message that is less than 100 characters.
+Second experiment is tested on medium message that is between 100 and 1000 characters.
+Final experiment is tested on long message that is more than 1000 characters.
 
-For the simplicity of the project, a correct label does not have to be extract match for it to be true.
-Only if the server can have at least one correct flag then it consider correct, otherwise it is wrong at label.
-
-For example message `I hate you and want to punch you'.
-
-Input: hate, violence
-
-Output: hate, self harm -> true
-
-Output: violence, sexual -> true
-
-Output: sexual -> false
-
-This method to estimate accurary is checked by client after receiving all messages and will not be affecting the benchmark performance.
-
-\subsection{Environment}
-% Describe the general experimental environment (e.g., cloud instances, infrastructure, client, and server)
-The environment will be done on cloud instances from Google Cloud.
-Each experiment has one server and one client.
-The client will send the same set of test messages to server.
-The test data is 5\% of total dataset.
-After collecting all the data needed to show a plot, the data processing can be done locally.
-
-\subsection{Experiment 1: Rule-based moderation}
-% Recommended length: 1-2 pages
-% Describe the purpose of your experiment and give a general description of it.
-Benchmark performance for Rule-based message moderation.
+The three moderation techniques can be explained here: The first technique is rule-based.
 This rule-based implementation is the simplest among experiments.
 It uses only list of words to label a message and basic text modification like filtering, change to lowercase, etc.
-
 The testing flow is that the client send for example `I want to kick you' to the server.
 The server receive the message, normalized the message by these methods: force characters to lower case, convert common symbol pattern to word (Leetspeak k1ck -> kick).
 Then check if the message contain any words from five word lists of hate, sexual, scam, seft harm, and violence.
 With the example message, the list of violence words have the word `kick' so the message is flagged as violence.
 
-\subsubsection{Setup}
-% Describe the setup of your experiment, e.g., the connection between the machines, the used client, and/or the configuration of parameters.
-\begin{itemize}
-    \item Start a server running Bun as a runtime.
-    \item Run a Bun runtime client and send messages to /moderation/rule.
-\end{itemize}
-
-\subsubsection{Hypothesis}
-% Give a hypothesis on the experiment's expected outcome (ideally before you run the experiment for the first time), e.g., in terms of expected performance scalability when scaling the cores, etc.
-\begin{itemize}
-    \item The performance should be the best among experiments
-    \item The accuracy is lowest since
-\end{itemize}
-
-\subsubsection{Results and Discussion}
-% Describe and discuss the results and how/why they match or don't match the hypothesis, including, e.g., bottleneck analysis, simple performance scaling prediction.
-- To be written
-
-\subsection{Experiment 2: Embedding model}
-% Recommended length: 1-2 pages
-Benchmark performance for message moderation with the embedding model.
+The second technique is embedding model.
 Embedding model work by it can embed a message to a vector.
 Similar messages will have vector that near each other and can be compared with cosine similarity.
 So the way I use embedding model is that I have a trainning set of messages with labeled flag.
-I split the dataset to 95\% train and 5\% to test.
-
+I split the dataset to train and test set.
+The training set contains around 120000 labeled messages from multiple these sources mentioned at \ref{code-change}.
 First the embedding model will train through all the trainning data to compute embeddings value and stored it as a file.
 Then when receive a message, the model can compute the nearest matching message and get that label to flag the incoming message.
 This model can perform much faster than LLM but is limited to the trainning dataset.
+After some experiments, I found that the Nomic embedding model with 8 bit quantization is the best choice for this project due to its performance and accuracy.
 
-\subsubsection{Setup}
-\begin{itemize}
-    \item Start a server running Bun as a runtime.
-    \item Run a Bun runtime client and send messages to /moderation/embed.
-\end{itemize}
-
-\subsubsection{Hypothesis}
-\begin{itemize}
-    \item The performance and accuracy should be between the first and third experiments
-\end{itemize}
-\subsubsection{Results and Discussion}
-- To be written
-\subsection{Experiment 3: LLM}
-% Recommended length: 1-2 pages
-Benchmark performance for message moderation with a small general LLM.
+The last technique is LLM.
 LLM approach is the simplest to setup since I assume the model already have enough knowledge and can make classification with only simple instruction.
 This experiment will based mainly on the blog of `Cost-effective ai content moderation'\cite{cost-effective-moderation}.
-The choice for LLM is not yet to be determined since it can be varies by price/performance.
-This experiment will test through both calling cloud LLM and running a local LLM
-to compare the accuracy and cost.
+The choice for LLM is Qwen 2.5 1.5B after running some experiments.
+The chosen model follows the custom instruction and give clean JSON output.
 
 To make LLM moderate message content, a simple instruction is given to the LLM.
-The following instruction example is from the blog post\cite{cost-effective-moderation}:
+The following instruction example is from the blog post\cite{cost-effective-moderation}. The actual instruction used in the project is slightly modified to fit the chosen model (Qwen 2.5 1.5B).
 % \begin{verbatim}
 \lstset{
-basicstyle=\ttfamily\small,
-% numbers=left,
-frame=single,
-breaklines=true,
-breakatwhitespace=true,
-postbreak=\mbox{\textcolor{gray}{↪↪}},
-linewidth=\textwidth
+    basicstyle=\ttfamily\small,
+    % numbers=left,
+    frame=single,
+    breaklines=true,
+    breakatwhitespace=true,
+    postbreak=\mbox{\textcolor{gray}{↪↪}},
+    linewidth=\textwidth
 }
 \begin{lstlisting}
 Role: Content Moderation Classifier
@@ -357,69 +301,271 @@ OUTPUT FORMAT (STRICT JSON ONLY):
 \end{lstlisting}
 
 With this instruction, the model should return a json output which can then be used to label the message.
+
+For the simplicity of the project, a correct label does not have to be extract match for it to be true.
+If the message should not be flagged, then the server should return false for all categories.
+Else the server should get at least one correct flag then it consider correct, otherwise it is wrong at label.
+
+For example message `I hate you and want to punch you'.
+
+Input: hate, violence
+
+Output: hate, self harm -> true
+
+Output: violence, sexual -> true
+
+Output: sexual -> false
+
+This method to estimate accurary is checked by client after receiving all messages and will not be affecting the server performance.
+
+\subsection{Environment}
+% Describe the general experimental environment (e.g., cloud instances, infrastructure, client, and server)
+The environment will be done on cloud instances from Google Cloud.
+Each experiment has one server and one client.
+The client will send the same set of test messages to server.
+The total test data is 5\% of total dataset. But due to the expensive runtime cost, the test data is limited to 100 samples for each run.
+After collecting all the data needed to show a plot, the data processing can be done locally using Python and Matplotlib to visualize the result.
+
+The testing infrastructure is done on Google Cloud.
+The server instance is a g2-standard-4 instance with 4 vCPUs and 16GB memory, and an Nvidia L4 GPU.
+The GPU is used for the embedding model and LLM to accelerate the inference time.
+The client instance is a e2-standard-2 instance with 2 vCPUs and 8GB memory.
+
+After creating the VM instances, I have installed Bun runtime on both server and client.
+The server also need to install the GPU driver and CUDA toolkit to run the embedding model and LLM.
+Then I pull the source code from my GitHub repository to both server and client to start the benchmark.
+
+\subsection{Experiment 1: Short message}
+% Recommended length: 1-2 pages
+% Describe the purpose of your experiment and give a general description of it.
+Benchmark performance for short messages that are less than 100 characters.
+I test the performance of the three moderation techniques with the same first 100 samples of the short message dataset.
+For each endpoint, five requests rate are sent to the server to see how the server handles the load and how the response time changes with the request rate.
+The same number of samples and request rate are then used for other experiments
+
+\subsubsection{Setup}
+% Describe the setup of your experiment, e.g., the connection between the machines, the used client, and/or the configuration of parameters.
+\begin{itemize}
+    \item Start the server running Bun as a runtime.
+    \item Run a Bun runtime client and send messages to all three moderation techniques /moderation/rule, /moderation/embed, and /moderation/llm.
+    \item The client will send the same set of test messages to server for each moderation technique.
+\end{itemize}
+
+\subsubsection{Hypothesis}
+% Give a hypothesis on the experiment's expected outcome (ideally before you run the experiment for the first time), e.g., in terms of expected performance scalability when scaling the cores, etc.
+\begin{itemize}
+    \item The performance for rule-based method should be the best among endpoints
+    \item The server should follow the M/M/1 queueing model when changing the sending rate since there is only one server
+    \item The throughput increases with the sending rate until the server is saturated
+\end{itemize}
+
+\subsubsection{Results and Discussion}
+% Describe and discuss the results and how/why they match or don't match the hypothesis, including, e.g., bottleneck analysis, simple performance scaling prediction.
+The results for the first experiment are shown in the following table and plots.
+The results show that the rule-based method has the best performance with the lowest average response time and highest throughput.
+However, only the rule-based method follows the M/M/1 queueing model closely, while the embedding and LLM methods deviate from the model at higher utilization levels.
+
+The throughput for rule-based method increases with the sending rate until it reaches saturation and does not reach the maximum possible throughput, while the embedding and LLM methods keep increasing past the predicted saturation point until they reach new saturation and then drop off.
+The plots\ref{fig:short_throughput} show the relationship between throughput and sending rate for each moderation technique, indicating the saturation points.
+
+\input{../results/analysis/short/metrics_table}
+% \begin{figure}[htbp]
+%     \centering
+%     \includegraphics[width=\textwidth]{../results/analysis/short/w_vs_rho.png}
+%     \caption{Measured vs.\ predicted mean response time \(W\) as a function of utilization \(\rho\). The solid blue line is the M/M/1 prediction using the median \(\mu\) for each technique. Red points are measured values with 95\% bootstrap confidence intervals.}
+%     \label{fig:short_w_vs_rho}
+% \end{figure}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{../results/analysis/short/throughput.png}
+    \caption{Throughput (requests per second) as a function of sending rate. The server saturates at the maximum throughput for each moderation technique.}
+    \label{fig:short_throughput}
+\end{figure}
+
+
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{../results/analysis/short/service_dist.png}
+    \caption{Service time distributions.}
+    \label{fig:short_service_dist}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{../results/analysis/short/interarrival_qq.png}
+    \caption{Observed inter-arrival times vs.\ theoretical exponential quantiles, validating the Poisson arrival assumption.}
+    \label{fig:short_interarrival_qq}
+\end{figure}
+
+
+
+\subsection{Experiment 2: Medium message}
+% Recommended length: 1-2 pages
+Benchmark performance for medium messages that are between 100 and 1000 characters.
+
+
 \subsubsection{Setup}
 \begin{itemize}
-    \item Start a server running Bun as a runtime.
-    \item Run a Bun runtime client and send messages to /moderation/llm.
+    \item Start the server running Bun as a runtime.
+    \item Run a Bun runtime client and send messages to all three moderation techniques /moderation/rule, /moderation/embed, and /moderation/llm.
+    \item The client will send the same set of test messages to server for each moderation technique.
+\end{itemize}
+
+\subsubsection{Hypothesis}
+\begin{itemize}
+    \item Take longer average time to process than short messages
+    \item  
+\end{itemize}
+
+\subsubsection{Results and Discussion}
+The assumption made in the hypothesis is correct, the average response time for medium messages is longer than short messages for all three moderation techniques.
+The results for the second experiment are shown in the following table and plots.
+
+\input{../results/analysis/medium/metrics_table}
+% \begin{figure}[htbp]
+%     \centering
+%     \includegraphics[width=\textwidth]{../results/analysis/medium/w_vs_rho.png}
+%     \caption{Measured vs.\ predicted mean response time \(W\) as a function of utilization \(\rho\). The solid blue line is the M/M/1 prediction using the median \(\mu\) for each technique. Red points are measured values with 95\% bootstrap confidence intervals.}
+%     \label{fig:medium_w_vs_rho}
+% \end{figure}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{../results/analysis/medium/throughput.png}
+    \caption{Throughput (requests per second) as a function of sending rate. The server saturates at the maximum throughput for each moderation technique.}
+    \label{fig:medium_throughput}
+\end{figure}
+
+
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{../results/analysis/medium/service_dist.png}
+    \caption{Service time distributions.}
+    \label{fig:medium_service_dist}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{../results/analysis/medium/interarrival_qq.png}
+    \caption{Observed inter-arrival times vs.\ theoretical exponential quantiles, validating the Poisson arrival assumption.}
+    \label{fig:medium_interarrival_qq}
+\end{figure}
+
+
+
+\subsection{Experiment 3: Long messages}
+% Recommended length: 1-2 pages
+Benchmark performance for long messages that are more than 1000 characters.
+\subsubsection{Setup}
+\begin{itemize}
+    \item Start the server running Bun as a runtime.
+    \item Run a Bun runtime client and send messages to all three moderation techniques /moderation/rule, /moderation/embed, and /moderation/llm.
+    \item The client will send the same set of test messages to server for each moderation technique.
 \end{itemize}
 
 \subsubsection{Hypothesis}
 \begin{itemize}
     \item The performance should be worse among experiments
-    \item has the highest accuracy
+    \item 
 \end{itemize}
 
 \subsubsection{Results and Discussion}
-- To be written
+\input{../results/analysis/medium/metrics_table}
+% \begin{figure}[htbp]
+%     \centering
+%     \includegraphics[width=\textwidth]{../results/analysis/medium/w_vs_rho.png}
+%     \caption{Measured vs.\ predicted mean response time \(W\) as a function of utilization \(\rho\). The solid blue line is the M/M/1 prediction using the median \(\mu\) for each technique. Red points are measured values with 95\% bootstrap confidence intervals.}
+%     \label{fig:medium_w_vs_rho}
+% \end{figure}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{../results/analysis/medium/throughput.png}
+    \caption{Throughput (requests per second) as a function of sending rate. The server saturates at the maximum throughput for each moderation technique.}
+    \label{fig:medium_throughput}
+\end{figure}
+
+
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{../results/analysis/medium/service_dist.png}
+    \caption{Service time distributions.}
+    \label{fig:medium_service_dist}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{../results/analysis/medium/interarrival_qq.png}
+    \caption{Observed inter-arrival times vs.\ theoretical exponential quantiles, validating the Poisson arrival assumption.}
+    \label{fig:medium_interarrival_qq}
+\end{figure}
+
 
 \section{Modeling of the Application}
 \label{section4}
-% Recommended length: 1-2 pages
 
-% In this section, you must model your application using NoQ or M/M/m. Describe which of the previous experiments you used for modeling, the question you want to answer, and your hypothesis. Also, explain why you chose the model type, how you obtained the input parameters, what the outputs are, and depict/graph the results. Ultimately, compare how well the model matches the reality (your measurements) and argue why it does or doesn't.
+Because the project is running a single server with three different moderation techniques, I can model the system with the \textbf{M/M/1} queueing model.
+The three moderation techniques (rule-based, embedding, and small LLM) each process one request at a time.
+the rule engine runs asynchronously on a single Bun thread, and both the embedding model and LLM hold exclusive GPU context via \texttt{node-llama-cpp}. This single-server behavior makes each endpoint fit for the \textbf{M/M/1} queueing model --- Markovian (Poisson) arrivals, Markovian (exponential) service times, and a single server.
+
+\subsection{Question \& Hypothesis}
+There are two main questions to answer, one concerning the modeling and the other is about which method is the best for chat moderation.
+
+The first question to answer is: \textit{How does the throughput scale with the arrival rate \(\lambda\) for each moderation technique, and at what utilization \(\rho\) does the system begin to saturate?}
+
+I hypothesize that:
+\begin{itemize}
+    \item The \textbf{rule-based} endpoint (pure CPU, near-deterministic service times \(\sigma \approx 0.2\)~ms) will fit M/M/1 well, despite its low variance, because utilization is the dominant factor.
+    \item The \textbf{embedding} and \textbf{LLM} endpoints (GPU-accelerated, high variance in service times) will deviate from M/M/1 predictions at high utilization due to non-exponential service distributions.
+\end{itemize}
+
+\subsection{Input Parameters}
+
+A controlled-rate benchmark client was implemented to generate Poisson arrivals with a target rate \(\lambda\) (requests per second). For each technique, I collected 100 samples at five different arrival rates spanning from less than half saturation to over the saturation point.
+
+The service rate \(\mu\) was estimated from the measured service times (or called latency):
+\[
+    \hat{\mu} = \frac{1}{\overline{S}}, \quad S = \text{measured service time (seconds)}
+\]
+where \(\overline{S}\) is the sample mean. The utilization is then \(\rho = \lambda / \mu\). For a stable M/M/1 queue, \(\rho < 1\).
+
+Table~\ref{tab:mm1} summarizes the measured parameters and model predictions.
+
+\subsection{Results}
+
+% \input{../results/analysis/metrics_table}
 
 % \begin{figure}[htbp]
 %     \centering
-%     \includegraphics[width=.5\textwidth]{example-image-a}
-%     \caption{A}
-%     \label{fig:a1}
+%     \includegraphics[width=\textwidth]{../results/analysis/w_vs_rho.png}
+%     \caption{Measured vs.\ predicted mean response time \(W\) as a function of utilization \(\rho\). The solid blue line is the M/M/1 prediction using the median \(\mu\) for each technique. Red points are measured values with 95\% bootstrap confidence intervals.}
+%     \label{fig:w_vs_rho}
 % \end{figure}
 
 % \begin{figure}[htbp]
-%     \begin{minipage}{0.48\textwidth}
-%         \centering
-%         \includegraphics[width=\linewidth]{example-image-a}
-%         \caption{A}
-%         \label{fig:b1}
-%     \end{minipage}\hfill
-%     \begin{minipage}{0.48\textwidth}
-%         \centering
-%         \includegraphics[width=\linewidth]{example-image-b}
-%         \caption{B}
-%         \label{fig:b2}
-%     \end{minipage}
+%     \centering
+%     \includegraphics[width=\textwidth]{../results/analysis/service_dist.png}
+%     \caption{Service time distributions with best-fit exponential PDF overlay.}
+%     \label{fig:service_dist}
 % \end{figure}
 
 % \begin{figure}[htbp]
-%     \begin{minipage}{0.33\textwidth}
-%         \centering
-%         \includegraphics[width=\linewidth]{example-image-a}
-%         \caption{A}
-%         \label{fig:c1}
-%     \end{minipage}\hfill
-%     \begin{minipage}{0.33\textwidth}
-%         \centering
-%         \includegraphics[width=\linewidth]{example-image-b}
-%         \caption{B}
-%         \label{fig:c2}
-%     \end{minipage}
-%     \begin{minipage}{0.33\textwidth}
-%         \centering
-%         \includegraphics[width=\linewidth]{example-image-c}
-%         \caption{C}
-%         \label{fig:c3}
-%     \end{minipage}
+%     \centering
+%     \includegraphics[width=\textwidth]{../results/analysis/interarrival_qq.png}
+%     \caption{Q-Q plots of observed inter-arrival times vs.\ theoretical exponential quantiles, validating the Poisson arrival assumption.}
+%     \label{fig:interarrival_qq}
 % \end{figure}
+
+\subsection{Discussion}
+
+The rule-based endpoint matches the M/M/1 model closely across all utilization levels (error \(<5\%\)). Although its service times are nearly deterministic (\(\text{CV} \ll 1\)), the M/M/1 prediction remains accurate because the queueing dynamics are dominated by arrival variability at moderate-to-high \(\rho\).
+
+The embedding model shows good agreement at low \(\rho\) but begins deviating above \(\rho \approx 0.6\).
+
+The LLM endpoint exhibits the largest deviation. Service times are heavy-tailed (some prompts generate significantly more tokens, prolonging inference). The M/M/1 model systematically underpredicts response time at high utilization because the true service distribution has a much heavier tail than exponential.
+
+If we were to refine the model, the \textbf{M/G/1} queue (Pollaczek--Khinchine formula) would be a better fit for the embedding and LLM endpoints, as it only requires the mean and variance of the service time without assuming a specific distribution.
 
 \bibliographystyle{plain}
 \bibliography{refs.bib}

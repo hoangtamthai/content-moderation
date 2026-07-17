@@ -2,7 +2,7 @@ project_id            = "content-moderation-502108"           # Your project id 
 ssh_pub_key_file_path = "~/.ssh/id_rsa.pub" # Path to your public ssh key file
 
 region            = "us-west4"
-availability_zone = "us-west4-b" # The availability zone in which the VMs will be started
+availability_zone = "us-west4-a" # The availability zone in which the VMs will be started
 
 stop_all = false # Stop all of the VMs (e.g., if you are finished with your experiments)
 

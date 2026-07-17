@@ -20,10 +20,10 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-# size = "short"
+size = "short"
 # size = "medium"
-size = "long"
-results = "results3/"
+# size = "long"
+results = "results/"
 RESULTS_DIR = Path(results + size)
 OUTPUT_DIR = Path(results +"analysis/" + size)
 
@@ -88,7 +88,7 @@ def compute_metrics(data):
             lastMessage = max(lastMessage, arrival_times[i] + service_times[i])
         # total_duration = arrival_times[-1] + service_times[-1] - arrival_times[0]
         total_duration = lastMessage - arrival_times[0]
-        print("Total duration",total_duration)
+        # print("Total duration",total_duration)
         measured_throughput = len(service_times) / total_duration if total_duration > 0 else 0
         correct_flags = [r.get("correct") for r in rows if r.get("correct") is not None]
         accuracy = statistics.mean(correct_flags) if correct_flags else None
@@ -138,6 +138,46 @@ def print_table(metrics):
               f"{m['measured_throughput']:<14.4f}")
 
     print("=" * 120)
+
+
+def generate_latex_table(metrics):
+    path = OUTPUT_DIR / "metrics_table.tex"
+    lines = [
+        r"\begin{table}[htbp]",
+        r"\centering",
+        r"\caption{M/M/1 queueing model parameters and validation across APIs}",
+        r"\label{tab:mm1-metrics}",
+        r"\begin{tabular}{lccccccc}",
+        r"\toprule",
+        r"API & $\lambda$ (req/s) & $\mu$ (req/s) & $\rho$ & $W_{\text{pred}}$ (s) & $W_{\text{meas}}$ (s) & CI (s) & \%err \\",
+        r"\midrule",
+    ]
+
+    for (method, lam), m in sorted(metrics.items()):
+        if m["rho"] is None:
+            rho_str = r"$>1$"
+            W_pred_str = "N/A"
+        else:
+            rho_str = f"${m['rho']:.3f}$"
+            W_pred_str = f"${m['W_pred']:.4f}$" if m["W_pred"] else "N/A"
+
+        ci = m["W_ci"]
+        ci_str = f"$[{ci[0]:.3f},\;{ci[1]:.3f}]$"
+        err_str = f"${m['error_pct']:.1f}\%$" if m["error_pct"] != float("inf") else "N/A"
+        lines.append(
+            f"{method} & ${lam:.2f}$ & ${m['mu']:.4f}$ & {rho_str} "
+            f"& {W_pred_str} & ${m['W_meas']:.4f}$ & {ci_str} & {err_str} \\\\"
+        )
+
+    lines.extend([
+        r"\bottomrule",
+        r"\end{tabular}",
+        r"\end{table}",
+        "",
+    ])
+
+    path.write_text("\n".join(lines))
+    print(f"  Saved {path}")
 
 
 def plot_l_vs_rho(metrics):
@@ -336,6 +376,7 @@ def main():
     metrics = compute_metrics(data)
 
     print_table(metrics)
+    generate_latex_table(metrics)
 
     print("\nGenerating plots...")
     plot_l_vs_rho(metrics)

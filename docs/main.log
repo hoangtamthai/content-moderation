@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.22.0 (TeX Live 2025/nixos.org)  (format=lualatex 1980.1.1)  17 JUL 2026 22:00
+This is LuaHBTeX, Version 1.22.0 (TeX Live 2025/nixos.org)  (format=lualatex 1980.1.1)  17 JUL 2026 22:03
  restricted system commands enabled.
  file:line:error style messages enabled.
 **/home/tam/projects/content-moderation/docs/main
@@ -2378,12 +2378,16 @@ LaTeX Font Info:    Font shape `TU/Roboto(0)/m/n' will be
 {/nix/store/q8n89mjpx6nkbqvjj73wwly2gk4rnj89-texlive-2025-r78234-final-env/share/texmf-var/fonts/map/pdftex/updmap/pdftex.map}<./tuda_logo.png>]
 LaTeX Font Info:    Font shape `TU/Roboto(0)/b/n' will be
 (Font)              scaled to size 10.0pt on input line 115.
+
+
+LaTeX Warning: Citation `text-moderation' on page 2 undefined on input line 143.
+
 <flow.png, id=117, 742.775pt x 586.19pt>
 File: flow.png Graphic file (type png)
 <use flow.png>
 Package luatex.def Info: flow.png  used on input line 157.
 (luatex.def)             Requested size: 301.12152pt x 237.64716pt.
- [2
+[2
 
 ] [3<./flow.png>]
 LaTeX Font Info:    Font shape `TU/RobotoMono(0)/m/n' will be
@@ -2892,80 +2896,80 @@ Missing character: There is no ↪ (U+21AA) in font [RobotoMono-Regular.otf]:mod
 Missing character: There is no ↪ (U+21AA) in font [RobotoMono-Regular.otf]:mode=node;script=DFLT;language=dflt;!
 Missing character: There is no ↪ (U+21AA) in font [RobotoMono-Regular.otf]:mode=node;script=DFLT;language=dflt;!
 [5] (../results/analysis/short/metrics_table.tex)
-<../results/analysis/short/w_vs_rho.png, id=208, 1156.32pt x 361.35pt>
+<../results/analysis/short/w_vs_rho.png, id=209, 1156.32pt x 361.35pt>
 File: ../results/analysis/short/w_vs_rho.png Graphic file (type png)
 <use ../results/analysis/short/w_vs_rho.png>
 Package luatex.def Info: ../results/analysis/short/w_vs_rho.png  used on input line 377.
 (luatex.def)             Requested size: 512.14963pt x 160.0421pt.
-<../results/analysis/short/throughput.png, id=209, 1156.32pt x 361.35pt>
+<../results/analysis/short/throughput.png, id=210, 1156.32pt x 361.35pt>
 File: ../results/analysis/short/throughput.png Graphic file (type png)
 <use ../results/analysis/short/throughput.png>
 Package luatex.def Info: ../results/analysis/short/throughput.png  used on input line 383.
 (luatex.def)             Requested size: 512.14963pt x 160.0421pt.
-<../results/analysis/short/accuracy_vs_latency.png, id=210, 722.7pt x 433.62pt>
+<../results/analysis/short/accuracy_vs_latency.png, id=211, 722.7pt x 433.62pt>
 File: ../results/analysis/short/accuracy_vs_latency.png Graphic file (type png)
 <use ../results/analysis/short/accuracy_vs_latency.png>
 Package luatex.def Info: ../results/analysis/short/accuracy_vs_latency.png  used on input line 389.
 (luatex.def)             Requested size: 512.14963pt x 307.2901pt.
-<../results/analysis/short/service_dist.png, id=211, 1156.32pt x 361.35pt>
+<../results/analysis/short/service_dist.png, id=212, 1156.32pt x 361.35pt>
 File: ../results/analysis/short/service_dist.png Graphic file (type png)
 <use ../results/analysis/short/service_dist.png>
 Package luatex.def Info: ../results/analysis/short/service_dist.png  used on input line 396.
 (luatex.def)             Requested size: 512.14963pt x 160.0421pt.
-<../results/analysis/short/interarrival_qq.png, id=212, 1156.32pt x 361.35pt>
+<../results/analysis/short/interarrival_qq.png, id=213, 1156.32pt x 361.35pt>
 File: ../results/analysis/short/interarrival_qq.png Graphic file (type png)
 <use ../results/analysis/short/interarrival_qq.png>
 Package luatex.def Info: ../results/analysis/short/interarrival_qq.png  used on input line 403.
 (luatex.def)             Requested size: 512.14963pt x 160.0421pt.
  [6<../results/analysis/short/w_vs_rho.png>] [7<../results/analysis/short/throughput.png><../results/analysis/short/accuracy_vs_latency.png>] [8<../results/analysis/short/service_dist.png><../results/analysis/short/interarrival_qq.png>] (../results/analysis/medium/metrics_table.tex)
-<../results/analysis/medium/w_vs_rho.png, id=239, 1156.32pt x 361.35pt>
+<../results/analysis/medium/w_vs_rho.png, id=240, 1156.32pt x 361.35pt>
 File: ../results/analysis/medium/w_vs_rho.png Graphic file (type png)
 <use ../results/analysis/medium/w_vs_rho.png>
 Package luatex.def Info: ../results/analysis/medium/w_vs_rho.png  used on input line 439.
 (luatex.def)             Requested size: 512.14963pt x 160.0421pt.
-<../results/analysis/medium/throughput.png, id=240, 1156.32pt x 361.35pt>
+<../results/analysis/medium/throughput.png, id=241, 1156.32pt x 361.35pt>
 File: ../results/analysis/medium/throughput.png Graphic file (type png)
 <use ../results/analysis/medium/throughput.png>
 Package luatex.def Info: ../results/analysis/medium/throughput.png  used on input line 445.
 (luatex.def)             Requested size: 512.14963pt x 160.0421pt.
-<../results/analysis/medium/accuracy_vs_latency.png, id=241, 722.7pt x 433.62pt>
+<../results/analysis/medium/accuracy_vs_latency.png, id=242, 722.7pt x 433.62pt>
 File: ../results/analysis/medium/accuracy_vs_latency.png Graphic file (type png)
 <use ../results/analysis/medium/accuracy_vs_latency.png>
 Package luatex.def Info: ../results/analysis/medium/accuracy_vs_latency.png  used on input line 451.
 (luatex.def)             Requested size: 512.14963pt x 307.2901pt.
-<../results/analysis/medium/service_dist.png, id=242, 1156.32pt x 361.35pt>
+<../results/analysis/medium/service_dist.png, id=243, 1156.32pt x 361.35pt>
 File: ../results/analysis/medium/service_dist.png Graphic file (type png)
 <use ../results/analysis/medium/service_dist.png>
 Package luatex.def Info: ../results/analysis/medium/service_dist.png  used on input line 457.
 (luatex.def)             Requested size: 512.14963pt x 160.0421pt.
-<../results/analysis/medium/interarrival_qq.png, id=243, 1156.32pt x 361.35pt>
+<../results/analysis/medium/interarrival_qq.png, id=244, 1156.32pt x 361.35pt>
 File: ../results/analysis/medium/interarrival_qq.png Graphic file (type png)
 <use ../results/analysis/medium/interarrival_qq.png>
 Package luatex.def Info: ../results/analysis/medium/interarrival_qq.png  used on input line 464.
 (luatex.def)             Requested size: 512.14963pt x 160.0421pt.
  (../results/analysis/long/metrics_table.tex)
-<../results/analysis/long/w_vs_rho.png, id=244, 1156.32pt x 361.35pt>
+<../results/analysis/long/w_vs_rho.png, id=245, 1156.32pt x 361.35pt>
 File: ../results/analysis/long/w_vs_rho.png Graphic file (type png)
 <use ../results/analysis/long/w_vs_rho.png>
 Package luatex.def Info: ../results/analysis/long/w_vs_rho.png  used on input line 492.
 (luatex.def)             Requested size: 512.14963pt x 160.0421pt.
  [9] [10<../results/analysis/medium/w_vs_rho.png><../results/analysis/medium/throughput.png>] [11<../results/analysis/medium/accuracy_vs_latency.png><../results/analysis/medium/service_dist.png>]
-<../results/analysis/long/throughput.png, id=267, 1156.32pt x 361.35pt>
+<../results/analysis/long/throughput.png, id=268, 1156.32pt x 361.35pt>
 File: ../results/analysis/long/throughput.png Graphic file (type png)
 <use ../results/analysis/long/throughput.png>
 Package luatex.def Info: ../results/analysis/long/throughput.png  used on input line 499.
 (luatex.def)             Requested size: 512.14963pt x 160.0421pt.
-<../results/analysis/long/accuracy_vs_latency.png, id=268, 722.7pt x 433.62pt>
+<../results/analysis/long/accuracy_vs_latency.png, id=269, 722.7pt x 433.62pt>
 File: ../results/analysis/long/accuracy_vs_latency.png Graphic file (type png)
 <use ../results/analysis/long/accuracy_vs_latency.png>
 Package luatex.def Info: ../results/analysis/long/accuracy_vs_latency.png  used on input line 505.
 (luatex.def)             Requested size: 512.14963pt x 307.2901pt.
-<../results/analysis/long/service_dist.png, id=269, 1156.32pt x 361.35pt>
+<../results/analysis/long/service_dist.png, id=270, 1156.32pt x 361.35pt>
 File: ../results/analysis/long/service_dist.png Graphic file (type png)
 <use ../results/analysis/long/service_dist.png>
 Package luatex.def Info: ../results/analysis/long/service_dist.png  used on input line 512.
 (luatex.def)             Requested size: 512.14963pt x 160.0421pt.
-<../results/analysis/long/interarrival_qq.png, id=270, 1156.32pt x 361.35pt>
+<../results/analysis/long/interarrival_qq.png, id=271, 1156.32pt x 361.35pt>
 File: ../results/analysis/long/interarrival_qq.png Graphic file (type png)
 <use ../results/analysis/long/interarrival_qq.png>
 Package luatex.def Info: ../results/analysis/long/interarrival_qq.png  used on input line 519.
@@ -2982,19 +2986,23 @@ Package cleveref Info: loaded `english' language definitions on input line 9.
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
  ***********
+
+
+LaTeX Warning: There were undefined references.
+
 )
 
 Here is how much of LuaTeX's memory you used:
  41900 strings out of 476078
- 381535,1648299 words of node,token memory allocated
+ 381544,1648299 words of node,token memory allocated
  2610 words of node memory still in use:
    65 hlist, 6 vlist, 21 rule, 6 local_par, 4 math, 34 glue, 9 kern, 6 penalty, 2 glyph, 249 attribute, 64 glue_spec, 130 attribute_list, 2 write, 24 pdf_literal, 2 pdf_action, 40 pdf_colorstack, 1 pdf_setmatrix, 1 pdf_save, 1 pdf_restore nodes
-   avail lists: 1:4,2:7948,3:766,4:820,5:7721,6:238,7:19669,8:80,9:13872,10:16,11:865
+   avail lists: 1:5,2:7948,3:768,4:820,5:7721,6:236,7:19672,8:80,9:13872,10:16,11:865
  63244 multiletter control sequences out of 65536+600000
  122 fonts using 17681135 bytes
  122i,21n,135p,11272b,1115s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</nix/store/x8l0kd8xafjb9f0w32s0yjy3n66jr2i4-xcharter-1.26-tex/fonts/opentype/public/xcharter/XCharter-Italic.otf></nix/store/x8l0kd8xafjb9f0w32s0yjy3n66jr2i4-xcharter-1.26-tex/fonts/opentype/public/xcharter/XCharter-Bold.otf></nix/store/46cm4s2yjrlqhwdswp8bg41kprgxw59q-texlive-2025-r78234-final-env-texmfdist/fonts/opentype/google/roboto/RobotoMono-Regular.otf></nix/store/46cm4s2yjrlqhwdswp8bg41kprgxw59q-texlive-2025-r78234-final-env-texmfdist/fonts/opentype/google/roboto/Roboto-Regular.otf></nix/store/x8l0kd8xafjb9f0w32s0yjy3n66jr2i4-xcharter-1.26-tex/fonts/opentype/public/xcharter/XCharter-Roman.otf></nix/store/46cm4s2yjrlqhwdswp8bg41kprgxw59q-texlive-2025-r78234-final-env-texmfdist/fonts/opentype/google/roboto/Roboto-Bold.otf></nix/store/46cm4s2yjrlqhwdswp8bg41kprgxw59q-texlive-2025-r78234-final-env-texmfdist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></nix/store/46cm4s2yjrlqhwdswp8bg41kprgxw59q-texlive-2025-r78234-final-env-texmfdist/fonts/type1/public/amsfonts/cm/cmr9.pfb></nix/store/46cm4s2yjrlqhwdswp8bg41kprgxw59q-texlive-2025-r78234-final-env-texmfdist/fonts/type1/public/amsfonts/cm/cmsy9.pfb>
-Output written on main.pdf (16 pages, 1509120 bytes).
+</nix/store/x8l0kd8xafjb9f0w32s0yjy3n66jr2i4-xcharter-1.26-tex/fonts/opentype/public/xcharter/XCharter-Italic.otf></nix/store/46cm4s2yjrlqhwdswp8bg41kprgxw59q-texlive-2025-r78234-final-env-texmfdist/fonts/opentype/google/roboto/RobotoMono-Regular.otf></nix/store/x8l0kd8xafjb9f0w32s0yjy3n66jr2i4-xcharter-1.26-tex/fonts/opentype/public/xcharter/XCharter-Bold.otf></nix/store/46cm4s2yjrlqhwdswp8bg41kprgxw59q-texlive-2025-r78234-final-env-texmfdist/fonts/opentype/google/roboto/Roboto-Regular.otf></nix/store/x8l0kd8xafjb9f0w32s0yjy3n66jr2i4-xcharter-1.26-tex/fonts/opentype/public/xcharter/XCharter-Roman.otf></nix/store/46cm4s2yjrlqhwdswp8bg41kprgxw59q-texlive-2025-r78234-final-env-texmfdist/fonts/opentype/google/roboto/Roboto-Bold.otf></nix/store/46cm4s2yjrlqhwdswp8bg41kprgxw59q-texlive-2025-r78234-final-env-texmfdist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></nix/store/46cm4s2yjrlqhwdswp8bg41kprgxw59q-texlive-2025-r78234-final-env-texmfdist/fonts/type1/public/amsfonts/cm/cmr9.pfb></nix/store/46cm4s2yjrlqhwdswp8bg41kprgxw59q-texlive-2025-r78234-final-env-texmfdist/fonts/type1/public/amsfonts/cm/cmsy9.pfb>
+Output written on main.pdf (16 pages, 1508978 bytes).
 
 PDF statistics: 464 PDF objects out of 1000 (max. 8388607)
  364 compressed objects within 4 object streams

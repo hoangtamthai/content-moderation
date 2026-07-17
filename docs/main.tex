@@ -140,7 +140,7 @@ The three types of content moderation that are tested are:
         \toprule
         \multicolumn{1}{|c|}{Route} & \multicolumn{1}{c|}{Solution}                                                                             \\ \midrule
         /moderation/rule            & Simple rule-based using word list with some text modification                                             \\
-        /moderation/embed           & Embedding models or text classification model like Text-Moderation\textbackslash{}cite\{text-moderation\} \\
+        /moderation/embed           & Embedding models or text classification model like Text-Moderation\cite{text-moderation} \\
         /moderation/llm             & Small general LLM like google-2.5-flash-lite, or open weight model like                                   \\ \bottomrule
     \end{tabular}
 \end{table}
@@ -223,18 +223,18 @@ This rule-based implementation is the simplest among experiments.
 It uses only list of words to label a message and basic text modification like filtering, change to lowercase, etc.
 The testing flow is that the client send for example `I want to kick you' to the server.
 The server receive the message, normalized the message by these methods: force characters to lower case, convert common symbol pattern to word (Leetspeak k1ck -> kick).
-Then check if the message contain any words from five word lists of hate, sexual, scam, seft harm, and violence.
+Then check if the message contain any words from five word lists of hate, sexual, scam, self harm, and violence.
 With the example message, the list of violence words have the word `kick' so the message is flagged as violence.
 
 The second technique is embedding model.
 Embedding model work by it can embed a message to a vector.
-Similar messages will have vector that near each other and can be compared with cosine similarity.
-So the way I use embedding model is that I have a trainning set of messages with labeled flag.
+Similar messages will have vectors that are near each other and can be compared with cosine similarity.
+So the way I use embedding model is that I have a training set of messages with labeled flag.
 I split the dataset to train and test set.
 The training set contains around 120000 labeled messages from multiple these sources mentioned at \ref{code-change}.
-First the embedding model will train through all the trainning data to compute embeddings value and stored it as a file.
+First the embedding model will train through all the training data to compute embeddings value and stored it as a file.
 Then when receive a message, the model can compute the nearest matching message and get that label to flag the incoming message.
-This model can perform much faster than LLM but is limited to the trainning dataset.
+This model can perform much faster than LLM but is limited to the training dataset.
 After some experiments, I found that the Nomic embedding model with 8 bit quantization is the best choice for this project due to its performance and accuracy.
 
 The last technique is LLM.
@@ -302,7 +302,7 @@ OUTPUT FORMAT (STRICT JSON ONLY):
 
 With this instruction, the model should return a json output which can then be used to label the message.
 
-For the simplicity of the project, a correct label does not have to be extract match for it to be true.
+For the simplicity of the project, a correct label does not have to be exact match for it to be true.
 If the message should not be flagged, then the server should return false for all categories.
 Else the server should get at least one correct flag then it consider correct, otherwise it is wrong at label.
 
@@ -316,7 +316,7 @@ Output: violence, sexual -> true
 
 Output: sexual -> false
 
-This method to estimate accurary is checked by client after receiving all messages and will not be affecting the server performance.
+This method to estimate accuracy is checked by client after receiving all messages and will not be affecting the server performance.
 
 \subsection{Environment}
 % Describe the general experimental environment (e.g., cloud instances, infrastructure, client, and server)
@@ -387,7 +387,7 @@ The accuracy of the rule-based method and embedding method stay the same when ch
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{../results/analysis/short/accuracy_vs_latency.png}
-    \caption{Experiment 2: Accuracy vs.\ latency for each moderation technique.}
+    \caption{Experiment 1: Accuracy vs.\ latency for each moderation technique.}
     \label{fig:short_accuracy_vs_latency}
 \end{figure}
 

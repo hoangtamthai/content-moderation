@@ -53,7 +53,7 @@ def load_results():
 def mm1_predict(mu, lam):
     rho = lam / mu
     if rho >= 1:
-        return None, None, None, None
+        return rho, None, None, None
     L = rho / (1 - rho)
     Lq = rho**2 / (1 - rho)
     W = 1.0 / (mu - lam)
@@ -73,14 +73,14 @@ def compute_metrics(data):
 
         W_meas = statistics.mean(service_times)
 
-        # Bootstrap 95% CI on W
-        boot_means = []
-        for _ in range(2000):
-            sampled = [random.choice(service_times) for _ in range(len(service_times))]
-            boot_means.append(statistics.mean(sampled))
-        boot_means.sort()
-        ci_lower = boot_means[50]
-        ci_upper = boot_means[1950]
+        # # Bootstrap 95% CI on W
+        # boot_means = []
+        # for _ in range(2000):
+        #     sampled = [random.choice(service_times) for _ in range(len(service_times))]
+        #     boot_means.append(statistics.mean(sampled))
+        # boot_means.sort()
+        # ci_lower = boot_means[50]
+        # ci_upper = boot_means[1950]
 
         # total_duration = sum(inter_arrivals) + sum(service_times) if service_times else 0
         lastMessage = arrival_times[0] + service_times[0]
@@ -101,7 +101,7 @@ def compute_metrics(data):
             "rho": rho,
             "W_pred": W_pred,
             "W_meas": W_meas,
-            "W_ci": (ci_lower, ci_upper),
+            # "W_ci": (ci_lower, ci_upper),
             "L_pred": L_pred,
             "Lq_pred": Lq_pred,
             "error_pct": percent_error,
@@ -117,24 +117,24 @@ def compute_metrics(data):
 def print_table(metrics):
     print("\n" + "=" * 120)
     print(f"{'API':<8} {'λ (req/s)':<12} {'μ (req/s)':<12} {'ρ':<10} "
-          f"{'W_pred (s)':<12} {'W_meas (s)':<12} {'W_ci (s)':<18} {'%err':<8} "
+          f"{'W_pred (s)':<12} {'W_meas (s)':<12} {'%err':<8} "
           f"{'X_meas (r/s)':<14}")
     print("-" * 120)
 
     for (method, lam), m in sorted(metrics.items()):
-        if m["rho"] is None:
-            rho_str = ">1 "
+        if m["rho"] > 1 or m["rho"] is None:
+            rho_str = f"{m['rho']:.3f} > 1"
             W_pred_str = "N/A"
         else:
             rho_str = f"{m['rho']:.3f}"
             W_pred_str = f"{m['W_pred']:.4f}" if m['W_pred'] else "N/A"
 
-        ci = m["W_ci"]
-        ci_str = f"[{ci[0]:.3f}, {ci[1]:.3f}]" if ci[0] is not None else "N/A"
+        # ci = m["W_ci"]
+        # ci_str = f"[{ci[0]:.3f}, {ci[1]:.3f}]" if ci[0] is not None else "N/A"
         err_str = f"{m['error_pct']:.1f}%" if m["error_pct"] != float("inf") else "N/A"
 
         print(f"{method:<8} {lam:<12.2f} {m['mu']:<12.4f} {rho_str:<10} "
-              f"{W_pred_str:<12} {m['W_meas']:<12.4f} {ci_str:<18} {err_str:<8} "
+              f"{W_pred_str:<12} {m['W_meas']:<12.4f} {err_str:<8} "
               f"{m['measured_throughput']:<14.4f}")
 
     print("=" * 120)
@@ -142,14 +142,21 @@ def print_table(metrics):
 
 def generate_latex_table(metrics):
     path = OUTPUT_DIR / "metrics_table.tex"
+    experiment = ""
+    if size == "short":
+        experiment = "Experiment 1"
+    elif size == "medium":
+        experiment = "Experiment 2"
+    else:
+        experiment = "Experiment 3"
     lines = [
         r"\begin{table}[htbp]",
         r"\centering",
-        r"\caption{M/M/1 queueing model parameters and validation across APIs}",
+        r"\caption{" + experiment + ": M/M/1 queueing model parameters and validation across APIs}",
         r"\label{tab:mm1-metrics}",
         r"\begin{tabular}{lccccccc}",
         r"\toprule",
-        r"API & $\lambda$ (req/s) & $\mu$ (req/s) & $\rho$ & $W_{\text{pred}}$ (s) & $W_{\text{meas}}$ (s) & CI (s) & \%err \\",
+        r"API & $\lambda$ (req/s) & $\mu$ (req/s) & $\rho$ & $W_{\text{pred}}$ (s) & $W_{\text{meas}}$ (s) & \%err \\",
         r"\midrule",
     ]
 
@@ -161,12 +168,12 @@ def generate_latex_table(metrics):
             rho_str = f"${m['rho']:.3f}$"
             W_pred_str = f"${m['W_pred']:.4f}$" if m["W_pred"] else "N/A"
 
-        ci = m["W_ci"]
-        ci_str = f"$[{ci[0]:.3f},\;{ci[1]:.3f}]$"
+        # ci = m["W_ci"]
+        # ci_str = f"$[{ci[0]:.3f},\;{ci[1]:.3f}]$"
         err_str = f"${m['error_pct']:.1f}\%$" if m["error_pct"] != float("inf") else "N/A"
         lines.append(
             f"{method} & ${lam:.2f}$ & ${m['mu']:.4f}$ & {rho_str} "
-            f"& {W_pred_str} & ${m['W_meas']:.4f}$ & {ci_str} & {err_str} \\\\"
+            f"& {W_pred_str} & ${m['W_meas']:.4f}$ & {err_str} \\\\"
         )
 
     lines.extend([
@@ -180,7 +187,7 @@ def generate_latex_table(metrics):
     print(f"  Saved {path}")
 
 
-def plot_l_vs_rho(metrics):
+def plot_w_vs_rho(metrics):
     methods = sorted(set(k[0] for k in metrics))
     fig, axes = plt.subplots(1, 3, figsize=(16, 5))
 
@@ -188,7 +195,7 @@ def plot_l_vs_rho(metrics):
         ax = axes[idx]
         pts = [(m["rho"], m["L_pred"], m["mu"], lam)
                for (mth, lam), m in sorted(metrics.items())
-               if mth == method and m["rho"] is not None]
+               if mth == method and m["rho"] < 5]
         if not pts:
             ax.set_title(f"{method} — no data")
             continue
@@ -198,28 +205,31 @@ def plot_l_vs_rho(metrics):
         lambdas = [p[3] for p in pts]
 
         l_meas = []
+        w_meas = []
         for (mth, lam), m in sorted(metrics.items()):
-            if mth == method and m["rho"] is not None:
-                l_meas.append(lam * m["W_meas"])
+            if mth == method and m["rho"] < 5:
+                w_meas.append(m["W_meas"])
+                # l_meas.append(lam * m["W_meas"])
 
-        rho_curve = np.linspace(0.01, 0.99, 200)
-        l_curve = [r / (1 - r) for r in rho_curve]
-        ax.plot(rho_curve, l_curve, "b-", linewidth=2,
-                label=f"M/M/1 L (μ={mu_val:.2f})")
+        rho_max_plot = max(0.99, max(rhos) * 1.1) if rhos else 0.99
+        rho_curve = np.linspace(0.01, min(0.99, rho_max_plot), 200)
+        w_curve = [1.0 / (mu_val * (1 - r)) if r < 1 else float("inf") for r in rho_curve]
+        ax.plot(rho_curve, w_curve, "b-", linewidth=2,
+                label=f"M/M/1 W (μ={mu_val:.2f})")
 
-        ax.scatter(rhos, l_meas, color="red", s=60, zorder=5, label="Measured L (Little)")
+        ax.scatter(rhos, w_meas, color="red", s=60, zorder=5, label="Measured W")
         ax.axvline(x=1.0, color="gray", linestyle="--", alpha=0.4, label="ρ=1")
 
         ax.set_xlabel("Utilization ρ")
-        ax.set_ylabel("Mean tasks in system L")
+        ax.set_ylabel("Mean system time W (s)")
         ax.set_title(f"{method.upper()}")
         ax.legend()
         ax.grid(True, alpha=0.3)
 
-    fig.suptitle("Queue Buildup: M/M/1 Predicted vs Measured Tasks in System")
+    fig.suptitle("Queue Buildup: M/M/1 Predicted vs Measured System Time")
     fig.tight_layout()
-    fig.savefig(OUTPUT_DIR / "l_vs_rho.png", dpi=150)
-    print(f"  Saved {OUTPUT_DIR / 'l_vs_rho.png'}")
+    fig.savefig(OUTPUT_DIR / "w_vs_rho.png", dpi=150)
+    print(f"  Saved {OUTPUT_DIR / 'w_vs_rho.png'}")
 
 
 def plot_service_dist(metrics):
@@ -236,7 +246,7 @@ def plot_service_dist(metrics):
         m = metrics[(method, mid_lam)]
         times = m["service_times"]
 
-        ax.hist(times, bins=12, density=True, alpha=0.6, color="steelblue", label="Observed")
+        ax.hist(times, bins=12, alpha=0.6, color="steelblue", label="Observed")
 
         # Exponential fit
         mu_val = m["mu"]
@@ -245,7 +255,7 @@ def plot_service_dist(metrics):
         # ax.plot(x, y, "r-", linewidth=2, label=f"Exp(μ={mu_val:.2f})")
 
         ax.set_xlabel("Service time (s)")
-        ax.set_ylabel("Density")
+        ax.set_ylabel("Count")
         ax.set_title(f"{method.upper()} (λ={mid_lam})")
         ax.legend()
         ax.grid(True, alpha=0.3)
@@ -379,7 +389,7 @@ def main():
     generate_latex_table(metrics)
 
     print("\nGenerating plots...")
-    plot_l_vs_rho(metrics)
+    plot_w_vs_rho(metrics)
     plot_service_dist(metrics)
     plot_interarrival_qq(metrics)
     plot_throughput(metrics)

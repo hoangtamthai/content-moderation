@@ -559,11 +559,18 @@ A controlled-rate benchmark client was implemented to generate Poisson arrivals 
 For each technique, I ran 100 samples at five different arrival rates spanning from less than half saturation to over the saturation point.
 The main metrics used for modeling are the measured service times (latency).
 
-The service rate \(\mu\) was estimated from the measured service times (or called latency):
+The service rate \(\mu\) was estimated from the measured service times:
 \[
     \hat{\mu} = \frac{1}{\overline{S}}, \quad S = \text{measured service time (seconds)}
 \]
+
 where \(\overline{S}\) is the sample mean. The utilization is then \(\rho = \lambda / \mu\). For a stable M/M/1 queue, \(\rho < 1\).
+
+The utilization \(\rho\) is then calculated as:
+\[
+    \rho = \frac{\lambda}{\hat{\mu}}
+\]
+where \(\lambda\) is the arrival rate (requests per second follow the Poisson distribution) and \(\hat{\mu}\) is the estimated service rate.
 
 \subsection{Results}
 
